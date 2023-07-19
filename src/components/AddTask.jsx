@@ -10,15 +10,23 @@ function AddTask(props) {
 
   
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
 
     // We need the project id when creating the new task
     const { projectId } = props;
     // Create an object representing the body of the POST request
     const requestBody = { title, description, projectId };
 
+    // Get the token from the localStorage
+    const storedToken = localStorage.getItem('authToken');
+
+    // Send the token through the request "Authorization" Headers   
     axios
-      .post(`${API_URL}/api/tasks`, requestBody)
+      .post(
+        `${API_URL}/api/tasks`,
+        requestBody,
+        { headers: { Authorization: `Bearer ${storedToken}` } }        
+      )
       .then((response) => {
         // Reset the state to clear the inputs
         setTitle("");
