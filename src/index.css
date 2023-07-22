@@ -1,10 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+  font-family: "Eudoxus Sans", sans-serif;
+}
+
 body {
   margin: 0;
+  padding: 0;
 }
 
 a {
   list-style: none;
   color: black;
+}
+
+.btn-menu {
+  background: transparent;
+  border: transparent;
+  color: white;
+  cursor: pointer;
+  margin-top: 25px;
+  font-size: 15px;
+}
+
+.btn-menu-hamburguer, .link-menuhamburger {
+  width: 100%;
+  padding: 0;
+  height: 100px;
+  margin: 0;
+  border: none;
+  font-size: 20px;
+  background-color: transparent;
+  color: white;
+  cursor:pointer;
 }
 
 button,
@@ -28,23 +58,6 @@ textarea {
   margin: 10px;
 }
 
-nav {
-  background: #515f7d;
-  color: white;
-  padding: 0px 20px;
-  box-shadow: 0px 1px 2px gray;
-  width: 100%;
-  margin-bottom: 15px;
-  padding: 5px;
-}
-
-nav li {
-  list-style: none;
-  color: white;
-  font-size: 24px;
-  font-weight: 600;
-}
-
 .card {
   width: 400px;
   padding: 10px;
@@ -65,7 +78,7 @@ nav li {
 .AddTask,
 .SignupPage,
 .LoginPage {
-  background: #f9eec3;
+  /* background: #f9eec3; */
   border: 1px solid grey;
   box-shadow: 0px 2px 3px grey;
   width: 400px;
