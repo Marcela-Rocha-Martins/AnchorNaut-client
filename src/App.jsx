@@ -9,6 +9,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import IsPrivate from "./components/IsPrivate";
 import IsAnon from "./components/IsAnon";
+import DreamAssistantPage from "./pages/DreamAssistantPage";
 
 function App() {
   return (
@@ -17,6 +18,11 @@ function App() {
 
       <Routes>      
         <Route path="/" element={<HomePage />} />
+
+        <Route
+          path="/assistant"
+          element={ <IsPrivate> <DreamAssistantPage /> </IsPrivate> } 
+        />
 
         <Route
           path="/projects"

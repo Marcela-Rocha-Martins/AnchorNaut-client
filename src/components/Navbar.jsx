@@ -43,7 +43,7 @@ function Navbar() {
 
             {isLoggedIn && (
               <>
-                <Link to="/projects">
+                <Link to="/assistant">
                   <button className="btn-menu">Dream Assistent</button>
                 </Link>
 

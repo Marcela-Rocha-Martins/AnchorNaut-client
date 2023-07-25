@@ -27,7 +27,7 @@ function HamburguerMenu({
 
         {isLoggedIn && (
           <>
-            <Link className="link-menuhamburger" to="/projects" onClick={handleItemClick}>
+            <Link className="link-menuhamburger" to="/assistant" onClick={handleItemClick}>
               <button className="btn-menu-hamburguer">Dream Assistent</button>
             </Link>
 

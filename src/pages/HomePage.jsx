@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import ChartComponent from "../components/ChartComponent";
 import { AuthContext } from "../context/auth.context";
 import Gallery from "../components/GalleryComponent";
-<compo></compo>
 
 const API_URL = "http://localhost:5005";
 
