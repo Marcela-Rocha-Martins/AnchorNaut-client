@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import ChartComponent from "../components/ChartComponent";
 import { AuthContext } from "../context/auth.context";
-import Gallery from "../components/GalleryComponent";
 
 const API_URL = "http://localhost:5005";
 
@@ -17,20 +15,9 @@ function HomePage() {
         // Se estiver logado, exibe as informações do usuário e o gráfico
         <div>
           <h2>Hi, {user.name}</h2>
-          <div>
-            <img
-              src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYW0zNHo4bThvY2U4ODIyc205bjJiMGg2dGZubHlmdHIxdGJrbnplNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/74jItvcH8xlnijTlBV/giphy.gif"
-              alt="GIF animado"
-              style={{ width: 300 }}
-            />
-          </div>
-          <div>
-            <h3>Check the progress of your projects</h3>
-            <ChartComponent />
-          </div>
 
           <div className="projectsDisplayContainer" style={{ width: "400px", margin:"20px"}}>
-          <Gallery />
+      
 
             </div>
 

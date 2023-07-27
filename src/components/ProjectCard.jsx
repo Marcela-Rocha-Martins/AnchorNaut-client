@@ -1,16 +1,20 @@
 import { Link } from "react-router-dom";
 
+
 // We are deconstructing props object directly in the parentheses of the function
-function ProjectCard ( { title, description, _id } ) {
+function ProjectCard ( { projectName, description, _id, tasks } ) {
   
-  return (
+ return tasks ? (
     <div className="ProjectCard card">
       <Link to={`/projects/${_id}`}>
-        <h3>{title}</h3>
+        <h3>{projectName}</h3>
       </Link>
-      <p style={{ maxWidth: "400px" }}>{description} </p>
+      <p style={{ maxWidth: "400px" }}>{description}</p>
+
+      {/* Exibir a informação do total de tarefas e tarefas concluídas */}
+      <p>{`${tasks.filter(task => task.status === "done").length}/${tasks.length}`}</p>
     </div>
-  );
+  ) : null;
 }
 
 export default ProjectCard;

@@ -105,6 +105,7 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
 
   return (
     <div
+    
       style={{
         marginBottom: "10px",
         marginLeft: "10px",

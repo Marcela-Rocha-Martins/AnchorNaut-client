@@ -4,13 +4,12 @@ import axios from "axios";
 const API_URL = "http://localhost:5005";
 
 function AddProject(props) {
-  const [title, setTitle] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { title, description };
+    const requestBody = { projectName, description };
 
     // Get the token from the localStorage
     const storedToken = localStorage.getItem('authToken');
@@ -24,13 +23,12 @@ function AddProject(props) {
       )
       .then((response) => {
         // Reset the state
-        setTitle("");
+        setProjectName("");
         setDescription("");
         props.refreshProjects();
       })
       .catch((error) => console.log(error));
   };
-
 
   return (
     <div className="AddProject">
@@ -40,9 +38,9 @@ function AddProject(props) {
         <label>Title:</label>
         <input
           type="text"
-          name="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="projectName"
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
         />
 
         <label>Description:</label>

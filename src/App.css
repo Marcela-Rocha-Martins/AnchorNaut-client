@@ -31,3 +31,22 @@
     transform: rotate(360deg);
   }
 }
+
+.boardColumn {
+padding: 32px;
+display: flex;
+flex-direction: column;
+gap: 16px;
+background-color: #ececec;
+}
+
+.pressAnimation {
+  filter: drop-shadow(-4px 4px 0px #000 );
+  position: relative;
+}
+
+.pressAnimation:hover {
+  top: 4px;
+  left: -4px;
+  filter: none;
+}

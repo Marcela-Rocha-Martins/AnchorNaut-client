@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import anchorNautGIF from "../assets/iconBlackBG.gif";
 import { useMediaQuery } from "react-responsive";
-import HamburguerMenu from "./NavbarMobile"; 
-
 
 function Navbar() {
   // Subscribe to the AuthContext to gain access to
@@ -23,7 +21,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-black py-6 px-4 flex justify-between items-center" style={{ backgroundColor: "black", position: "sticky", top: 0 }}>
+    <nav className="sticky top-0 z-50 w-full bg-black py-6 px-4 flex justify-between items-center" style={{ backgroundColor: "black", position: "sticky", top: 0, zIndex:"1000" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "right", padding: "10px" }}>
         <img src={anchorNautGIF} alt="AnchorNaut" className="mr-auto" style={{ width: "80px", height: "80px" }} />
 
@@ -37,7 +35,7 @@ function Navbar() {
           <div style={{ justifyContent: "right", alignContents: "center" }}>
             <Link to="/">
               <button className="btn-menu">
-                <i className="fas fa-home"></i> Home
+                <i className="fas fa-home"></i>  Home
               </button>
             </Link>
 
@@ -47,18 +45,14 @@ function Navbar() {
                   <button className="btn-menu">Dream Assistent</button>
                 </Link>
 
-                <Link to="/projects">
+                {/* <Link to="/projects">
                   <button className="btn-menu">Projects</button>
-                </Link>
-
-                <Link to="/projects">
-                  <button className="btn-menu">Dream log</button>
-                </Link>
+                </Link> */}
 
                 <button className="btn-menu" onClick={logOutUser}>
                   Logout
                 </button>
-                <span className="user-name" style={{ color: 'white' }}>{user && user.name}</span>
+                {/* <span className="user-name" style={{ color: 'white', marginRight: "4px"}}>{user && user.name}</span> */}
               </>
             )}
 

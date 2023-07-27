@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import TaskItem from "../components/TaskItem";
 import { Link } from "react-router-dom";
+import ProjectCard from "../components/ProjectCard";
+
 
 const API_URL = "http://localhost:5005";
 
@@ -11,6 +13,8 @@ const DreamAssistantPage = () => {
   const [tasks, setTasks] = useState([]);
   const [projectLink, setProjectLink] = useState(null); // Estado para armazenar o link do projeto criado
   const [showAlert, setShowAlert] = useState(false); // Estado para controlar a exibição do alerta
+  const [projects, setProjects] = useState([]); // Adicione o estado para armazenar os projetos
+
   const token = localStorage.getItem("authToken");
 
   const handleDreamChange = (event) => {
@@ -91,58 +95,78 @@ const DreamAssistantPage = () => {
       console.log(formattedTasks, "formatted tasks");
 
       // Create the tasks and update the project with the task IDs
-      const tasksResponse = await axios.post(`${API_URL}/api/tasks`, formattedTasks, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const tasksResponse = await axios.post(
+        `${API_URL}/api/tasks`,
+        formattedTasks,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       // Extract the task IDs from the response
       const taskIds = tasksResponse.data.map((task) => task._id);
       console.log(taskIds, "tasks Ids");
-      
+
       // Criar o link para a página de detalhes do projeto após criar o projeto com sucesso
       const projectLink = `/projects/${projectId}`;
       setProjectLink(projectLink); // Atualizar o estado projectLink com o link do projeto criado
 
       // Mostrar o alerta com o botão "View Project Details"
       setShowAlert(true);
-
     } catch (error) {
       console.error("Error creating project and saving tasks:", error);
     }
   };
 
+  const getAllProjects = () => {
+    const storedToken = localStorage.getItem("authToken");
+    axios
+      .get(`${API_URL}/api/projects`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      })
+      .then((response) => setProjects(response.data))
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
+
+  
 
   return (
-    <div>
-      <h2>Transform Your Dreams into Personal Projects</h2>
-      <p>
-        Dream Assistant is a powerful tool that helps you turn your dreams and
-        aspirations into actionable personal projects. Simply enter your dream,
-        activate the Dream Assistant, and it will provide you with a list of
-        suggested tasks to achieve your dream. You can approve, edit, and break
-        down tasks further to make your dreams a reality.
-      </p>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
+      <div style={{ textAlign: "center" }}>
+        <h2>Transform Your Dreams into Personal Projects</h2>
+        <p>
+          Dream Assistant is a powerful tool that helps you turn your dreams and
+          aspirations into actionable personal projects. Simply enter your dream,
+          activate the Dream Assistant, and it will provide you with a list of
+          suggested tasks to achieve your dream. You can approve, edit, and break
+          down tasks further to make your dreams a reality.
+        </p>
+      </div>
 
-      <div>
-        <h2>My Dream Assistant</h2>
-        <div>
-          <input
-            type="text"
-            value={dream}
-            onChange={handleDreamChange}
-            placeholder="Enter your dream here"
-          />
-          <button onClick={handleActivateAssistant}>
-            {loading ? "Loading..." : "Activate Dream Assistant"}
-          </button>
-        </div>
-
-        {tasks ? (
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+        <div style={{ flex: "1", marginRight: "10px" }}>
+          <h2>My Dream Assistant</h2>
           <div>
-            <h3>Tasks suggested by Dream Assistant:</h3>
+            <input
+              type="text"
+              value={dream}
+              onChange={handleDreamChange}
+              placeholder="Enter your dream here"
+            />
+            <button onClick={handleActivateAssistant}>
+              {loading ? "Loading..." : "Activate Dream Assistant"}
+            </button>
+          </div>
+
+          {tasks && tasks.length > 0 ? (
             <div>
+              <h3>Tasks suggested by Dream Assistant:</h3>
               {tasks.map((task, index) => (
                 <TaskItem
                   key={index + "task"}
@@ -154,17 +178,25 @@ const DreamAssistantPage = () => {
                   i={index}
                 />
               ))}
+              <button onClick={handleApproveProjectEntry}>
+                Approve Project Entry
+              </button>
             </div>
-            <button onClick={handleApproveProjectEntry}>
-              Approve Project Entry
-            </button>
+          ) : null}
+        </div>
+
+        <div style={{ flex: "1", marginLeft: "10px" }}>
+          <h2>Projects List</h2>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {projects.map((project) => (
+        <ProjectCard key={project._id} {...project} />
+      ))}
           </div>
-        ) : null}
+        </div>
       </div>
 
-      {/* Exibir o alerta quando showAlert for true */}
       {showAlert && (
-        <div>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
           <h2>Project created and tasks saved successfully!</h2>
           <Link to={projectLink}>
             <button>View Project Details</button>

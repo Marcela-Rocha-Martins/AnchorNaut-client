@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddSubtaskForm from "./AddSubtaskForm";
-import { SubtaskCard } from "./SubtaskCard";
-import { Button } from "./Button";
 
 const API_URL = "http://localhost:5005";
 
@@ -20,7 +18,6 @@ function TaskCard({
   const [editing, setEditing] = useState(false);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [showAddSubtaskForm, setShowAddSubtaskForm] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
   const [subtasks, setSubtasks] = useState([]);
 
   const storedToken = localStorage.getItem("authToken");
@@ -112,6 +109,7 @@ function TaskCard({
         ...prevState,
         subTasks: [...prevState.subTasks, ...newSubTasks],
       }));
+      console.log(newSubTasks); // Verifique se as subtasks estão sendo corretamente adicionadas à task
     } catch (error) {
       console.error("Error calling Dream Assistant API to subtasks:", error);
     }
@@ -202,6 +200,8 @@ function TaskCard({
         deadline: "",
       });
       setEditingSubTaskIndex(null);
+
+      console.log(response.data); // Verifique se a subtarefa foi atualizada com sucesso
     } catch (error) {
       console.error(
         "Error calling API to update subtask:",
@@ -245,7 +245,7 @@ function TaskCard({
     }
   };
 
-  const handleDisapprove = (index) => {
+  const handleDesaprove = (index) => {
     // Remova a subtarefa não salva do estado da tarefa
     const updatedSubTasks = editedTask.subTasks.filter((_, i) => i !== index);
 
@@ -287,9 +287,7 @@ function TaskCard({
       console.error("Error updating task status:", error);
     }
   };
-
-  const [showSubtaskStatusOptions, setShowSubtaskStatusOptions] =
-    useState(false);
+  const [showSubtaskStatusOptions, setShowSubtaskStatusOptions] = useState(false);
 
   const handleShowSubtaskStatusOptions = () => {
     setShowSubtaskStatusOptions(true);
@@ -299,16 +297,10 @@ function TaskCard({
     setShowSubtaskStatusOptions(false);
   };
 
-  const handleSubtaskStatusChange = async (index) => {
+  const handleSubtaskStatusChange = async (index, newStatus) => {
     try {
       // Atualize o status da subtask no banco de dados
       const subtaskToUpdate = editedTask.subTasks[index];
-      let newStatus;
-
-      if (editedTask.subTasks[index].status !== "done") {
-        newStatus = "done";
-      } else newStatus = "pending";
-
       await axios.put(
         `${API_URL}/api/tasks/${taskId}/subtasks/${subtaskToUpdate._id}`,
         { status: newStatus },
@@ -324,55 +316,47 @@ function TaskCard({
       setEditedTask((prevState) => ({
         ...prevState,
         subTasks: updatedSubTasks,
-      }));
+      })); console.log(updatedSubTasks, "subtask status")
     } catch (error) {
       console.error("Error updating subtask status:", error);
+      
     }
   };
 
   const handleAddSubtask = async (newSubtask) => {
-    const addingNewSubtask = [...editedTask.subTasks, newSubtask];
+    const addingNewSubtask = [...subtasks, newSubtask];
 
-    setEditedTask((prevState) => ({
+    setSubtasks((prevState) => ({
       ...prevState,
-      subTasks: addingNewSubtask,
-    }));
+      subtasks: addingNewSubtask,
+  })) 
     // Hide the form after adding the subtask
     setShowAddSubtaskForm(false);
   };
-
+  
   return (
+    <div style={{backgroundColor: "rgba(0,0,0,0.6)", width: "100vw", height:"100vh", display:"absolute", top: "0", left: "0", position: "fixed"}}>
     <div
       style={{
-        backgroundColor: "rgba(0,0,0,0.6)",
-        width: "100vw",
-        height: "100vh",
-        display: "absolute",
-        top: "0",
-        left: "0",
-        marginTop: "40px",
-        position: "fixed",
+        backgroundColor: "#f1f1f1",
+        borderRadius: "5px",
+        padding: "10px",
+        width: "70vw",
+        maxHeight: "80vh",
+        overflow: "scroll",
+        position: "absolute",
+        top:"50%",
+        left:"50%",
+        margin: "0 auto",
+        transform: "translate(-50%,-50%)",
+        padding: "32px"
       }}
     >
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "5px",
-          width: "70vw",
-          maxHeight: "80vh",
-          overflow: "scroll",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          margin: "0 auto",
-          transform: "translate(-50%,-50%)",
-          padding: "32px",
-        }}
-      >
-        {/* edditing tasks form --------------------------------------------------------------------------- */}
-        <div>
-          {editing ? (
-            <form>
+      {/* edditing tasks form --------------------------------------------------------------------------- */}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {editing ? (
+          <form>
+            <label>
               Task:
               <input
                 type="text"
@@ -380,6 +364,8 @@ function TaskCard({
                 value={editedTask.task}
                 onChange={handleChange}
               />
+            </label>
+            <label>
               Deadline:
               <input
                 type="date"
@@ -387,174 +373,190 @@ function TaskCard({
                 value={editedTask.deadline}
                 onChange={handleChange}
               />
-              <Button type="button" onClick={handleSave}>
-                Save
-              </Button>
-              <Button type="button" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </form>
-          ) : (
-            <>
-              {/* status button tasks --------------------------------------------------------------------------- */}
+            </label>
+            <button type="button" onClick={handleSave}>
+              Save
+            </button>
+            <button type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          </form>
+        ) : (
+          <>
+          {/* status button tasks --------------------------------------------------------------------------- */}
+            {showStatusOptions ? (
+              <div>
+                <button onClick={() => handleStatusChange("pending")}>
+                  pending
+                </button>
+                <button onClick={() => handleStatusChange("doing")}>
+                  doing
+                </button>
+                <button onClick={() => handleStatusChange("done")}>done</button>
+              </div>
+            ) : (
+              <button onClick={() => setShowStatusOptions(true)}>
+                {editedTask.status}
+              </button>
+            )}
+            <button onClick={() => setCardDetail(null)}>close</button>
+            <div style={{ flex: "1" }}>
+              <h3>{editedTask.task}</h3>
+              <p>Estimated Time: {editedTask.estimatedTime}</p>
+              <p>
+                Deadline:{" "}
+                {editedTask.deadline
+                  ? new Date(editedTask.deadline).toLocaleDateString()
+                  : "Not set"}
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: "5px" }}>
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleDelete}>Delete</button>
+              <button onClick={handleBreakMoreClick}>Break More</button>
+            </div>
+          </>
+        )}
+      </div>
 
-              <div
-                style={{
-                  flex: "1",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <h2>{editedTask.task}</h2>
-                  <div style={{ display: "flex", gap: "20px" }}>
-                    <p
-                      style={{
-                        display: "flex",
-                        gap: "4px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p>Estimated time: </p>
-                      <span className="material-icons-outlined">
-                        timer
-                      </span>{" "}
-                      {editedTask.estimatedTime}
-                    </p>
-                    {editedTask.deadline ? (
-                      <p
-                        style={{
-                          display: "flex",
-                          gap: "4px",
-                          alignItems: "center",
-                        }}
+      {editedTask.subTasks && editedTask.subTasks.length > 0 && (
+        <div style={{ marginTop: "10px" }}>
+          <h4>Subtasks:</h4>
+          {editedTask.subTasks.map((subtask, index) => (
+            <div
+              key={subtask._id}
+              style={{
+                backgroundColor: "#d0d0d0",
+                borderRadius: "5px",
+                padding: "5px",
+                marginTop: "5px",
+                border: subtask.unsaved ? "1px solid red" : "none",
+              }}
+            >
+
+ {/* edditing subtasks --------------------------------------------------------------------------- */}
+              {editingSubTaskIndex === index ? (
+                <div style={{ marginTop: "10px" }}>
+                  <h4>Edit Subtask:</h4>
+                  <form>
+                    <label>
+                      Subtask:
+                      <input
+                        type="text"
+                        name="subTask"
+                        value={editedSubTask.subTask}
+                        onChange={handleSubTaskChange}
+                      />
+                    </label>
+                    <label>
+                      Deadline:
+                      <input
+                        type="date"
+                        name="deadline"
+                        value={editedSubTask.deadline}
+                        onChange={handleSubTaskChange}
+                      />
+                    </label>
+                    <button type="button" onClick={handleSaveSubTask}>
+                      Save
+                    </button>
+                    <button type="button" onClick={handleCancelSubTask}>
+                      Cancel
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div>
+                  <p>{subtask.subTask}</p>
+                  <div>
+                    {!subtask.unsaved ? (
+                      <>
+                        <button
+                          onClick={() =>
+                            handleSubtaskStatusChange(index, "pending")
+                          }
+                        >
+                          pending
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleSubtaskStatusChange(index, "doing")
+                          }
+                        >
+                          doing
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleSubtaskStatusChange(index, "done")
+                          }
+                        >
+                          done
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleStatusChange(subtask.status)}
                       >
-                        <span className="material-icons-outlined">
-                          calendar_month
-                        </span>
-                        {new Date(editedTask.deadline).toLocaleDateString()}
-                      </p>
+                        {subtask.status}
+                      </button>
+                    )}
+                  </div>
+
+                  <p>Estimated Time: {subtask.estimatedTime}</p>
+                  <p>
+                    Deadline:{" "}
+                    {subtask.deadline
+                      ? new Date(subtask.deadline).toLocaleDateString()
+                      : "Not set"}
+                  </p>
+                  <div style={{ display: "flex", gap: "5px" }}>
+                    {!subtask.unsaved && (
+                      <div style={{ display: "flex", gap: "5px" }}>
+                        <button onClick={() => handleEditSubtask(index)}>
+                          Edit
+                        </button>
+                        <button onClick={() => handleDeleteSubtask(index)}>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                    {subtask.unsaved ? (
+                      <>
+                        <button onClick={() => handleSaveNewSubtasks(index)}>
+                          Save
+                        </button>
+                        <button onClick={() => handleDesaprove(index)}>
+                          Desaprove entry
+                        </button>
+                      </>
                     ) : null}
                   </div>
                 </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >    <Button onClick={handleEdit}>
-                          <span className="material-icons-outlined">edit</span>
-                       
-                        </Button>
-                        <Button onClick={handleDelete}>
-                          <span className="material-icons-outlined">delete</span>
-  
-                        </Button>
-                        <Button onClick={() => setCardDetail(null)}>
-                          <span className="material-icons-outlined">close</span>
-                        </Button>
-                  <div style={{ display: "flex", position: "relative" }}>
-                    <Button onClick={() => setShowDropdown(!showDropdown)}>
-                      <span>status</span>
-                    </Button>
-                    {showDropdown && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          right: 0,
-                          zIndex: 20000,
-                          background: "#fff",
-                          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                          padding: "5px",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                     
-                        {showStatusOptions ? (
-                          <>
-                            <Button color="#CABAC8" onClick={() => handleStatusChange("pending")}>
-                              pending
-                            </Button>
-                            <Button color="#B2DDF7" onClick={() => handleStatusChange("doing")}>
-                              doing
-                            </Button>
-                            <Button color="#4CB5AE" onClick={() => handleStatusChange("done")}>
-                              done
-                            </Button>
-                          </>
-                        ) : (
-                          <Button
-                            onClick={() => {
-                              setShowStatusOptions(true);
-                              setShowDropdown(false); 
-                            }}
-                          >
-                            {editedTask.status}
-                          </Button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {editedTask.subTasks.length > 0 ? (
-          <div style={{ marginTop: "10px" }}>
-            <h4>Subtasks:</h4>
-            {editedTask.subTasks.map((sub, index) => (
-              <SubtaskCard
-                key={index}
-                subtask={sub}
-                index={index}
-                editingSubTaskIndex={editingSubTaskIndex}
-                editedSubTask={editedSubTask}
-                handleSubTaskChange={handleSubTaskChange}
-                handleDeleteSubtask={handleDeleteSubtask}
-                handleSaveSubTask={handleSaveSubTask}
-                handleCancelSubTask={handleCancelSubTask}
-                handleSubtaskStatusChange={handleSubtaskStatusChange}
-                handleStatusChange={handleStatusChange}
-                handleSaveNewSubtasks={handleSaveNewSubtasks}
-                handleEditSubtask={handleEditSubtask}
-                handleDisapprove={handleDisapprove}
-              />
-            ))}
-            <div>
-              {/* Novo botão para adicionar tarefa */}
-              {!showAddSubtaskForm && (
-                <Button
-                  color="#EBEE41"
-                  icon="add"
-                  onClick={() => setShowAddSubtaskForm(true)}
-                >
-                  New substask
-                </Button>
-              )}
-
-              {/* Formulário para adicionar uma nova tarefa */}
-              {showAddSubtaskForm && (
-                <AddSubtaskForm
-                  taskId={taskId}
-                  onAddSubtask={handleAddSubtask}
-                  onCancel={() => setShowAddSubtaskForm(false)}
-                  setEditedSubTask={setEditedSubTask}
-                />
               )}
             </div>
-          </div>
-        ) : (
-          <Button color="#EBEE41" onClick={handleBreakMoreClick}>
-            Generate subtasks
-          </Button>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
+
+    <div>
+  
+  {/* Novo botão para adicionar tarefa */}
+  {!showAddSubtaskForm && (
+             <button onClick={() => setShowAddSubtaskForm(true)}>
+             Add new subtask
+           </button>
+            )}
+
+            {/* Formulário para adicionar uma nova tarefa */}
+            {showAddSubtaskForm && (
+              <AddSubtaskForm
+               taskId={taskId}
+               onAddSubtask={handleAddSubtask}
+                onCancel={() => setShowAddSubtaskForm(false)}
+              />
+            )}
+    </div>
+    </div>
     </div>
   );
 }

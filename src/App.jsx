@@ -29,7 +29,7 @@ function App() {
           element={ <IsPrivate> <ProjectListPage /> </IsPrivate> } 
         />
 
-        <Route
+      <Route
           path="/projects/:projectId"
           element={ <IsPrivate> <ProjectDetailsPage /> </IsPrivate> }
         />

@@ -20,8 +20,9 @@ function TaskCard({
   const [editing, setEditing] = useState(false);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [showAddSubtaskForm, setShowAddSubtaskForm] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
   const [subtasks, setSubtasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   const storedToken = localStorage.getItem("authToken");
 
@@ -92,6 +93,7 @@ function TaskCard({
 
   const handleBreakMoreClick = async () => {
     try {
+      setLoading(true); // Define o estado do botão como "Loading" antes de fazer a chamada à API
       const response = await axios.post(
         `${API_URL}/api/assistant`,
         { prompt: task },
@@ -114,6 +116,8 @@ function TaskCard({
       }));
     } catch (error) {
       console.error("Error calling Dream Assistant API to subtasks:", error);
+    }finally {
+      setLoading(false); // Redefina o estado do botão de volta para o texto original após a conclusão do processamento ou em caso de erro
     }
   };
 
@@ -287,7 +291,6 @@ function TaskCard({
       console.error("Error updating task status:", error);
     }
   };
-
   const [showSubtaskStatusOptions, setShowSubtaskStatusOptions] =
     useState(false);
 
@@ -350,7 +353,6 @@ function TaskCard({
         display: "absolute",
         top: "0",
         left: "0",
-        marginTop: "40px",
         position: "fixed",
       }}
     >
@@ -358,6 +360,7 @@ function TaskCard({
         style={{
           backgroundColor: "white",
           borderRadius: "5px",
+          padding: "10px",
           width: "70vw",
           maxHeight: "80vh",
           overflow: "scroll",
@@ -370,136 +373,77 @@ function TaskCard({
         }}
       >
         {/* edditing tasks form --------------------------------------------------------------------------- */}
-        <div>
+        <div style={{ display: "flex", alignItems: "center" }}>
           {editing ? (
             <form>
-              Task:
-              <input
-                type="text"
-                name="task"
-                value={editedTask.task}
-                onChange={handleChange}
-              />
-              Deadline:
-              <input
-                type="date"
-                name="deadline"
-                value={editedTask.deadline}
-                onChange={handleChange}
-              />
-              <Button type="button" onClick={handleSave}>
+              <label>
+                Task:
+                <input
+                  type="text"
+                  name="task"
+                  value={editedTask.task}
+                  onChange={handleChange}
+                />
+              </label>
+              <label>
+                Deadline:
+                <input
+                  type="date"
+                  name="deadline"
+                  value={editedTask.deadline}
+                  onChange={handleChange}
+                />
+              </label>
+              <button type="button" onClick={handleSave}>
                 Save
-              </Button>
-              <Button type="button" onClick={handleCancel}>
+              </button>
+              <button type="button" onClick={handleCancel}>
                 Cancel
-              </Button>
+              </button>
             </form>
           ) : (
             <>
               {/* status button tasks --------------------------------------------------------------------------- */}
 
-              <div
-                style={{
-                  flex: "1",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <h2>{editedTask.task}</h2>
-                  <div style={{ display: "flex", gap: "20px" }}>
-                    <p
-                      style={{
-                        display: "flex",
-                        gap: "4px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p>Estimated time: </p>
-                      <span className="material-icons-outlined">
-                        timer
-                      </span>{" "}
-                      {editedTask.estimatedTime}
-                    </p>
-                    {editedTask.deadline ? (
-                      <p
-                        style={{
-                          display: "flex",
-                          gap: "4px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span className="material-icons-outlined">
-                          calendar_month
-                        </span>
-                        {new Date(editedTask.deadline).toLocaleDateString()}
-                      </p>
-                    ) : null}
-                  </div>
+            
+              <div style={{ flex: "1" }}>
+              
+                <h2>{editedTask.task}</h2>
+                <div style={{display:"flex", gap:"32px",}}>
+                <p style={{display:"flex", gap:"4px", alignItems:"center"}}><span className="material-icons-outlined">timer</span> {editedTask.estimatedTime}</p>
+                
+                    
+                  {editedTask.deadline
+                    ? (
+                      <p style={{display:"flex", gap:"4px", alignItems:"center"}}><span className="material-icons-outlined">calendar_month</span>
+                      {new Date(editedTask.deadline).toLocaleDateString()}`</p>
+                    ) 
+                    : null}
+                
                 </div>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "5px",
-                  }}
-                >    <Button onClick={handleEdit}>
-                          <span className="material-icons-outlined">edit</span>
-                       
-                        </Button>
-                        <Button onClick={handleDelete}>
-                          <span className="material-icons-outlined">delete</span>
-  
-                        </Button>
-                        <Button onClick={() => setCardDetail(null)}>
-                          <span className="material-icons-outlined">close</span>
-                        </Button>
-                  <div style={{ display: "flex", position: "relative" }}>
-                    <Button onClick={() => setShowDropdown(!showDropdown)}>
-                      <span>status</span>
-                    </Button>
-                    {showDropdown && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "100%",
-                          right: 0,
-                          zIndex: 20000,
-                          background: "#fff",
-                          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                          padding: "5px",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                     
-                        {showStatusOptions ? (
-                          <>
-                            <Button color="#CABAC8" onClick={() => handleStatusChange("pending")}>
-                              pending
-                            </Button>
-                            <Button color="#B2DDF7" onClick={() => handleStatusChange("doing")}>
-                              doing
-                            </Button>
-                            <Button color="#4CB5AE" onClick={() => handleStatusChange("done")}>
-                              done
-                            </Button>
-                          </>
-                        ) : (
-                          <Button
-                            onClick={() => {
-                              setShowStatusOptions(true);
-                              setShowDropdown(false); 
-                            }}
-                          >
-                            {editedTask.status}
-                          </Button>
-                        )}
-                      </div>
-                    )}
+              </div>
+              <div style={{ display: "flex", gap: "5px" }}>
+                {showStatusOptions ? (
+                  <div>
+                    <button onClick={() => handleStatusChange("pending")}>
+                      pending
+                    </button>
+                    <button onClick={() => handleStatusChange("doing")}>
+                      doing
+                    </button>
+                    <button onClick={() => handleStatusChange("done")}>
+                      done
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <button onClick={() => setShowStatusOptions(true)}>
+                    {editedTask.status}
+                  </button>
+                )}
+                <Button icon="edit"onClick={handleEdit}></Button>
+                <Button icon="delete" onClick={handleDelete}></Button>
+                <Button icon="close"onClick={() => setCardDetail(null)}></Button>
+                
               </div>
             </>
           )}
@@ -529,12 +473,8 @@ function TaskCard({
             <div>
               {/* Novo botão para adicionar tarefa */}
               {!showAddSubtaskForm && (
-                <Button
-                  color="#EBEE41"
-                  icon="add"
-                  onClick={() => setShowAddSubtaskForm(true)}
-                >
-                  New substask
+                <Button color="#EBEE41" icon="add" onClick={() => setShowAddSubtaskForm(true)}>
+                 New substask
                 </Button>
               )}
 
@@ -550,10 +490,14 @@ function TaskCard({
             </div>
           </div>
         ) : (
-          <Button color="#EBEE41" onClick={handleBreakMoreClick}>
-            Generate subtasks
-          </Button>
-        )}
+          <Button
+          color="#EBEE41"
+          onClick={() => {
+            if (!loading) handleBreakMoreClick();
+          }}
+        >
+          {loading ? "Loading..." : "Generate subtasks"}
+        </Button>        )}
       </div>
     </div>
   );
