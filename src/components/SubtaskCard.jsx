@@ -47,7 +47,7 @@ export const SubtaskCard = ({
               onChange={handleSubTaskChange}
             />
             <div>
-              Deadline:
+            <span className="material-icons-outlined">calendar_month</span>
               <input
                 type="date"
                 name="deadline"
@@ -56,10 +56,9 @@ export const SubtaskCard = ({
               />
             </div>
             <div>
-            <Button type="button" onClick={handleSaveSubTask}>
-              Save
+            <Button icon="save" type="button" onClick={handleSaveSubTask}>
             </Button>
-            <Button type="button" onClick={handleCancelSubTask}>
+            <Button icon="" type="button" onClick={handleCancelSubTask}>
               Cancel
             </Button>
             </div>
@@ -100,7 +99,7 @@ export const SubtaskCard = ({
           <div style={{ display: "flex", gap: "5px" }}>
             {!subtask.unsaved && (
               <div style={{ display: "flex", gap: "5px" }}>
-                <Button icon="edit" onClick={() => handleEditSubtask(index)}>Edit</Button>
+                <Button icon="edit" onClick={() => handleEditSubtask(index)}></Button>
                 <Button icon="delete" onClick={() => handleDeleteSubtask(index)}>
                 </Button>
               </div>

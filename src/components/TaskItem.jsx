@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Button } from "./Button";
+
 
 const API_URL = "http://localhost:5005";
 
@@ -110,22 +112,34 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
         marginBottom: "10px",
         marginLeft: "10px",
         width: "80%",
-        padding: "10px",
-        backgroundColor: task.parentId ? "#f1f1f1" : "#d3d3d3", // Use different background colors for parent tasks and subtasks
+        padding: "16px",
+        backgroundColor: "white", 
+        border: "2px dotted black",
+        borderRadius: "8px"// Use different background colors for parent tasks and subtasks
       }}
     >
       {editing ? (
         <>
           <input type="text" value={editedText} onChange={handleChange} />
-          <button onClick={handleSaveClick}>OK</button>
-          <button onClick={handleCancelClick}>Cancel</button>
+          <Button onClick={handleSaveClick}>OK</Button>
+          <Button onClick={handleCancelClick}>Cancel</Button>
         </>
       ) : (
         <>
-          <span>{task.text}</span> | <span>Estimated time: {task.time}</span>
-          <button onClick={handleEditClick}>Edit</button>
-          <button onClick={handleDeleteClick}>Delete</button>
-          <button onClick={handleBreakMoreClick}>Break More</button>
+        <div style={{display:"grid",gridTemplateColumns:"1fr auto"}}>
+        <div >
+          <h3 style={{margin:"0"}}>{task.text}</h3>  
+          
+          <div style={{display:"flex", alignItems:"center"}}>
+          <span className="material-icons-outlined">timer</span> {task.time}
+          </div>
+          </div>
+<div style={{display:"flex", alignItems:"center"}}>
+          <Button icon="edit" onClick={handleEditClick}>
+          </Button>
+          <Button icon="delete" onClick={handleDeleteClick}></Button>
+          </div>
+          </div>
           {/* Renderizar as subtarefas relacionadas abaixo da tarefa principal */}
           {task.subTasks !== undefined &&
             task.subTasks.map((subTask, index) => (
@@ -152,23 +166,23 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
                         });
                       }}
                     />
-                    <button onClick={() => handleSaveSubTaskClick(index)}>
+                    <Button onClick={() => handleSaveSubTaskClick(index)}>
                       OK
-                    </button>
-                    <button onClick={() => handleCancelSubTaskClick(index)}>
+                    </Button>
+                    <Button onClick={() => handleCancelSubTaskClick(index)}>
                       Cancel
-                    </button>
+                    </Button>
                   </>
                 ) : (
                   <>
                     <span>{subTask.text}</span> |{" "}
                     <span>Estimated time: {subTask.time}</span>
-                    <button onClick={() => handleEditSubTaskClick(index)}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleDeleteSubTaskClick(index)}>
-                      Delete
-                    </button>
+                    <Button onClick={() => handleEditSubTaskClick(index)}>
+                      
+                    </Button>
+                    <Button onClick={() => handleDeleteSubTaskClick(index)}>
+                   
+                    </Button>
                   </>
                 )}
               </div>

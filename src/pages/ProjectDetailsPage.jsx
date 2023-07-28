@@ -46,6 +46,20 @@ function ProjectDetailsPage(props) {
     });
   };
 
+  function editTaskStatus(id, status) {
+
+    let newProject = {...project}
+
+    for(let i = 0; i < newProject.tasks.length; i++) {
+      if (newProject.tasks[i]._id === id) {
+        newProject.tasks[i].status = status;
+      }
+    }
+    console.log(newProject,"teste");
+    setProject(newProject);
+  }
+
+
   const handleDeleteTask = (taskId) => {
     setProject((prevProject) => {
       const updatedTasks = prevProject.tasks.filter(
@@ -355,7 +369,6 @@ function ProjectDetailsPage(props) {
             display: "flex",
             alignItems: "center",
             gap: "4px",
-            margin: "0px",
             border: "2px dotted gray",
             justifyContent: "center",
             margin: "10px",
@@ -394,6 +407,7 @@ function ProjectDetailsPage(props) {
           subTasks={activeTask.subTasks}
           updateTask={updateTask}
           onDeleteTask={handleDeleteTask}
+          editTaskStatus={editTaskStatus} 
         />
       )}
     </div>

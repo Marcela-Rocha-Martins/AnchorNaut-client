@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Button } from "../components/Button";
 
 const API_URL = "http://localhost:5005";
 
@@ -36,32 +37,114 @@ function SignupPage(props) {
   };
 
   return (
-    <div className="SignupPage">
-      <h1>Sign Up</h1>
+    <body>
+      <div
+        style={{
+          padding: "2%",
+          width: "100vw",
+          position: "fixed",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        <div
+          className="SignupPage"
+          style={{
+            paddingTop: "10px",
+            alignItems: "center",
+            backgroundColor: "white",
+            border: "2px solid black",
+            borderRadius: "8px",
+          }}
+        >
+          <h1>Sign Up</h1>
 
-      <form onSubmit={handleSignupSubmit}>
-        <label>Email:</label>
-        <input type="email" name="email" value={email} onChange={handleEmail} />
+          <div
+            className="form-wrapper"
+            style={{ padding: "10px", alignItems: "center" }}
+          >
+            <form onSubmit={handleSignupSubmit}>
+              <label style={{ fontWeight: "bold" }}>Email:</label>
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handleEmail}
+                  style={{
+                    backgroundColor: "#f2f2f2",
+                    borderRadius: "8px",
+                    padding: "5px",
+                    width: "250px",
+                  }}
+                />
+                <i
+                  className="fa-solid fa-envelope"
+                  style={{ color: "#050505" }}
+                ></i>
+              </div>
 
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handlePassword}
-        />
+              <label style={{ fontWeight: "bold" }}>Password:</label>
+              <div>
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={handlePassword}
+                  style={{
+                   
+                    borderRadius: "8px",
+                    padding: "5px",
+                  }}
+                />{" "}
+                <i
+                  className="fas fa-unlock-alt"
+                  style={{ color: "#050505" }}
+                ></i>
+              </div>
+              <div>
+                <label style={{ fontWeight: "bold" }}>Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={handleName}
+                  style={{
+                    backgroundColor: "#E8F0FE",
+                    borderRadius: "8px",
+                    padding: "5px",
+                  }}
+                />
+                <i class="fa-solid fa-user" style={{ color: "#050506" }}></i>
+              </div>
+              <Button color="#EBEE41" type="submit">
+                Sign Up
+              </Button>
+            </form>
 
-        <label>Name:</label>
-        <input type="text" name="name" value={name} onChange={handleName} />
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+          </div>
+          <p>Already have account?</p>
 
-        <button type="submit">Sign Up</button>
-      </form>
-
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-      <p>Already have account?</p>
-      <Link to={"/login"}> Login</Link>
-    </div>
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "white",
+              fontSize: "16px",
+            }}
+          >
+            <Link to={"/login"}> Login</Link>
+            <i
+              className="fa-solid fa-arrow-right"
+              style={{ color: "#0c1018", marginLeft: "5px" }}
+            ></i>
+          </button>
+        </div>
+      </div>
+    </body>
   );
 }
 

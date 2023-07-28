@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function ProjectCard ( { projectName, description, _id, tasks } ) {
   
  return tasks ? (
-    <div className="ProjectCard card">
+    <div className="pressAnimation" style={{backgroundColor:"white",border:"2px solid black", borderRadius:"8px", padding:"16px"}}>
       <Link to={`/projects/${_id}`}>
         <h3>{projectName}</h3>
       </Link>

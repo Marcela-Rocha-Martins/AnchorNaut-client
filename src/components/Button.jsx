@@ -2,7 +2,6 @@ import React from "react";
 
 export const Button = ({ color = "white", onClick, icon, ...props }) => {
   
-
   return (
     <button
       onClick={onClick}
@@ -16,6 +15,8 @@ export const Button = ({ color = "white", onClick, icon, ...props }) => {
         fontWeight: "bold",
         display: "flex",
         textDecoration: "none",
+       fontSize:"16px",
+      alignItems:"center",
       }}
     >
       {icon ? <span className="material-icons-round">{icon}</span> : null}

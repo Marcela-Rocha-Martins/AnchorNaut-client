@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-import anchorNautGIF from "../assets/iconBlackBG.gif";
+import anchorNautGIF from "../assets/iconBlackBG.png";
 import { useMediaQuery } from "react-responsive";
 
 function Navbar() {
@@ -41,9 +41,9 @@ function Navbar() {
 
             {isLoggedIn && (
               <>
-                <Link to="/assistant">
-                  <button className="btn-menu">Dream Assistent</button>
-                </Link>
+                {/* <Link to="/assistant">
+                  <button className="btn-menu">About AnchorNaut</button>
+                </Link> */}
 
                 {/* <Link to="/projects">
                   <button className="btn-menu">Projects</button>
