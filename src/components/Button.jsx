@@ -1,7 +1,10 @@
 import React from "react";
+import { useMediaQuery } from "react-responsive";
+
 
 export const Button = ({ color = "white", onClick, icon, ...props }) => {
-  
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" }); //to responsiveness page
+
   return (
     <button
       onClick={onClick}
@@ -15,8 +18,10 @@ export const Button = ({ color = "white", onClick, icon, ...props }) => {
         fontWeight: "bold",
         display: "flex",
         textDecoration: "none",
-       fontSize:"16px",
-      alignItems:"center",
+        fontSize: isMobile ? "12px" : "16px",
+        alignItems:"center",
+        justifyContent: isMobile ? "center" : "flex-start", // Centralizar quando for mobile
+
       }}
     >
       {icon ? <span className="material-icons-round">{icon}</span> : null}

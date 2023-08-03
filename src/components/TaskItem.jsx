@@ -109,13 +109,13 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
     <div
     
       style={{
-        marginBottom: "10px",
-        marginLeft: "10px",
+        margin: "0 auto",
         width: "80%",
         padding: "16px",
         backgroundColor: "white", 
         border: "2px dotted black",
-        borderRadius: "8px"// Use different background colors for parent tasks and subtasks
+        borderRadius: "8px",
+        alignItems: "center",
       }}
     >
       {editing ? (
@@ -127,20 +127,21 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
       ) : (
         <>
         <div style={{display:"grid",gridTemplateColumns:"1fr auto"}}>
-        <div >
-          <h3 style={{margin:"0"}}>{task.text}</h3>  
+        <div style={{alignItems:"flex-start"}}>
+          <h3 style={{margin:"10px", marginLeft:"0", textAlign:"left"}}>{task.text}</h3>  
           
-          <div style={{display:"flex", alignItems:"center"}}>
+          <div style={{display:"flex"}}>
           <span className="material-icons-outlined">timer</span> {task.time}
           </div>
           </div>
+
 <div style={{display:"flex", alignItems:"center"}}>
           <Button icon="edit" onClick={handleEditClick}>
           </Button>
           <Button icon="delete" onClick={handleDeleteClick}></Button>
           </div>
           </div>
-          {/* Renderizar as subtarefas relacionadas abaixo da tarefa principal */}
+    
           {task.subTasks !== undefined &&
             task.subTasks.map((subTask, index) => (
               <div
@@ -148,7 +149,7 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
                 style={{
                   marginBottom: "10px",
                   padding: "10px",
-                  backgroundColor: "#f9f9f9", // Use a lighter background color for subtasks
+                  backgroundColor: "#f9f9f9", 
                 }}
               >
                 {" "}

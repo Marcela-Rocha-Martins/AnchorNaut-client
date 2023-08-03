@@ -16,7 +16,7 @@ function TaskCard({
   updateTask,
   onDeleteTask,
   setCardDetail,
-  editTaskStatus
+  editTaskStatus,
 }) {
   const [editing, setEditing] = useState(false);
   const [showAddSubtaskForm, setShowAddSubtaskForm] = useState(false);
@@ -44,7 +44,7 @@ function TaskCard({
 
   const handleEdit = () => {
     setEditing(true);
-    setShowDropdown(true); 
+    setShowDropdown(true);
   };
 
   const handleCancel = () => {
@@ -268,15 +268,17 @@ function TaskCard({
   const handleStatusChange = async (newStatus) => {
     try {
       // Atualize o status da tarefa no banco de dados
-      await axios.put(
-        `${API_URL}/api/tasks/${taskId}`,
-        { status: newStatus },
-        {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        }
-      ).then((x) => {
-        console.log(`atualizou o status, respost:`, x);
-      })
+      await axios
+        .put(
+          `${API_URL}/api/tasks/${taskId}`,
+          { status: newStatus },
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        )
+        .then((x) => {
+          console.log(`atualizou o status, respost:`, x);
+        });
 
       // Atualize o status da tarefa no estado local
       setEditedTask((prevState) => ({
@@ -284,7 +286,7 @@ function TaskCard({
         status: newStatus,
       }));
 
-      editTaskStatus(taskId, newStatus)
+      editTaskStatus(taskId, newStatus);
 
       // Feche o menu suspenso após selecionar o novo status
       setShowDropdown(false);
@@ -314,6 +316,10 @@ function TaskCard({
         newStatus = "done";
       } else newStatus = "pending";
 
+      // Atualize o status da subtask no estado local
+      const updatedSubTasks = [...editedTask.subTasks];
+      updatedSubTasks[index].status = newStatus;
+
       await axios.put(
         `${API_URL}/api/tasks/${taskId}/subtasks/${subtaskToUpdate._id}`,
         { status: newStatus },
@@ -321,10 +327,6 @@ function TaskCard({
           headers: { Authorization: `Bearer ${storedToken}` },
         }
       );
-
-      // Atualize o status da subtask no estado local
-      const updatedSubTasks = [...editedTask.subTasks];
-      updatedSubTasks[index].status = newStatus;
 
       setEditedTask((prevState) => ({
         ...prevState,
@@ -377,30 +379,51 @@ function TaskCard({
         {/* edditing tasks form --------------------------------------------------------------------------- */}
         <div>
           {editing ? (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <input
-                style={{ borderRadius: "5px", border: "2px solid", fontSize: "15px", width: "50%" }}
+                style={{
+                  borderRadius: "5px",
+                  border: "2px solid",
+                  fontSize: "15px",
+                  width: "50%",
+                }}
                 type="text"
                 name="task"
                 value={editedTask.task}
                 onChange={handleChange}
               />
-              <span className="material-icons-outlined">
-                calendar_month
-              </span>
+              <span className="material-icons-outlined">calendar_month</span>
               <input
-                style={{ borderRadius: "5px", border: "2px solid", fontSize: "15px" }}
+                style={{
+                  borderRadius: "5px",
+                  border: "2px solid",
+                  fontSize: "15px",
+                }}
                 type="date"
                 name="deadline"
                 value={editedTask.deadline}
                 onChange={handleChange}
               />
               <div style={{ display: "flex" }}>
-                <Button icon="save" color="#EBEE41" type="button" onClick={handleSave}>
+                <Button
+                  icon="save"
+                  color="#EBEE41"
+                  type="button"
+                  onClick={handleSave}
+                >
                   Save
                 </Button>
-                <Button icon="close" type="button" onClick={handleCancel}>
-                </Button>
+                <Button
+                  icon="close"
+                  type="button"
+                  onClick={handleCancel}
+                ></Button>
               </div>
             </div>
           ) : (
@@ -445,7 +468,6 @@ function TaskCard({
                   </div>
                 </div>
 
-
                 <div
                   style={{
                     display: "flex",
@@ -453,9 +475,33 @@ function TaskCard({
                     gap: "5px",
                   }}
                 >
-                  <div style={{ display: "flex", position: "relative"}}>
-                    <button style={{backgroundColor:"white", border: "2px solid black", borderRadius:"8px", position:"relative", top: "4px", cursor:"pointer", fontWeight:"bold", width:"110px"}} onClick={() => setShowDropdown(!showDropdown)}>
-                      <span>{editedTask.status.charAt(0).toUpperCase() + editedTask.status.slice(1)}</span><b style={{ fontSize: "10px", fontWeight: "normal", margin:"10px"}}>▼</b>
+                  <div style={{ display: "flex", position: "relative" }}>
+                    <button
+                      style={{
+                        backgroundColor: "white",
+                        border: "2px solid black",
+                        borderRadius: "8px",
+                        position: "relative",
+                        top: "4px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        width: "110px",
+                      }}
+                      onClick={() => setShowDropdown(!showDropdown)}
+                    >
+                      <span>
+                        {editedTask.status.charAt(0).toUpperCase() +
+                          editedTask.status.slice(1)}
+                      </span>
+                      <b
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: "normal",
+                          margin: "10px",
+                        }}
+                      >
+                        ▼
+                      </b>
                     </button>
                     {showDropdown && (
                       <div
@@ -471,18 +517,49 @@ function TaskCard({
                           flexDirection: "column",
                         }}
                       >
-                        <button style={{border: "none", backgroundColor:"white", fontWeight:"", cursor:"pointer", fontSize:"15px"}} onClick={() => handleStatusChange("pending")}>Pending</button>
-                        <button style={{border: "none", backgroundColor:"white", fontWeight:"", cursor:"pointer", fontSize:"15px"}}onClick={() => handleStatusChange("doing")}>Doing</button>
-                        <button style={{border: "none", backgroundColor:"white", fontWeight:"", cursor:"pointer", fontSize:"15px"}}onClick={() => handleStatusChange("done")}>Done</button>
+                        <button
+                          style={{
+                            border: "none",
+                            backgroundColor: "white",
+                            fontWeight: "",
+                            cursor: "pointer",
+                            fontSize: "15px",
+                          }}
+                          onClick={() => handleStatusChange("pending")}
+                        >
+                          Pending
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            backgroundColor: "white",
+                            fontWeight: "",
+                            cursor: "pointer",
+                            fontSize: "15px",
+                          }}
+                          onClick={() => handleStatusChange("doing")}
+                        >
+                          Doing
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            backgroundColor: "white",
+                            fontWeight: "",
+                            cursor: "pointer",
+                            fontSize: "15px",
+                          }}
+                          onClick={() => handleStatusChange("done")}
+                        >
+                          Done
+                        </button>
                       </div>
                     )}
                     <Button onClick={handleEdit}>
                       <span className="material-icons-outlined">edit</span>
-
                     </Button>
                     <Button onClick={handleDelete}>
                       <span className="material-icons-outlined">delete</span>
-
                     </Button>
                     <Button onClick={() => setCardDetail(null)}>
                       <span className="material-icons-outlined">close</span>
@@ -576,7 +653,6 @@ export default TaskCard;
 //   const [subtasks, setSubtasks] = useState([]);
 //   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
 
-
 //   const storedToken = localStorage.getItem("authToken");
 
 //   const [editedTask, setEditedTask] = useState({
@@ -598,7 +674,7 @@ export default TaskCard;
 
 //   const handleEdit = () => {
 //     setEditing(true);
-//     setShowStatusOptions(true); 
+//     setShowStatusOptions(true);
 //   };
 
 //   const handleCancel = () => {
@@ -995,14 +1071,13 @@ export default TaskCard;
 //                   </div>
 //                 </div>
 
-
 //                 <div
 //                   style={{
 //                     display: "flex",
 //                     flexDirection: "column",
 //                     gap: "5px",
 //                   }}
-//                 >    
+//                 >
 //                   <div style={{ display: "flex", position: "relative" }}>
 //                     <Button onClick={() => setShowDropdown(!showDropdown)}>
 //                       <span>status</span>
@@ -1037,22 +1112,22 @@ export default TaskCard;
 //                           <Button
 //                             onClick={() => {
 //                               setShowStatusOptions(true);
-//                               setShowDropdown(false); 
+//                               setShowDropdown(false);
 //                             }}
 //                           >
 //                             {editedTask.status}
 //                           </Button>
 //                         )}
 //                       </div>
-                      
+
 //                     )}
 //                     <Button onClick={handleEdit}>
 //                           <span className="material-icons-outlined">edit</span>
-                       
+
 //                         </Button>
 //                         <Button onClick={handleDelete}>
 //                           <span className="material-icons-outlined">delete</span>
-  
+
 //                         </Button>
 //                         <Button onClick={() => setCardDetail(null)}>
 //                           <span className="material-icons-outlined">close</span>

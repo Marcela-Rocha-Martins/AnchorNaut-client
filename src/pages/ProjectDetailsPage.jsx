@@ -47,18 +47,16 @@ function ProjectDetailsPage(props) {
   };
 
   function editTaskStatus(id, status) {
+    let newProject = { ...project };
 
-    let newProject = {...project}
-
-    for(let i = 0; i < newProject.tasks.length; i++) {
+    for (let i = 0; i < newProject.tasks.length; i++) {
       if (newProject.tasks[i]._id === id) {
         newProject.tasks[i].status = status;
       }
     }
-    console.log(newProject,"teste");
+    console.log(newProject, "teste");
     setProject(newProject);
   }
-
 
   const handleDeleteTask = (taskId) => {
     setProject((prevProject) => {
@@ -84,14 +82,14 @@ function ProjectDetailsPage(props) {
         ...prevProject,
         description: projectDescription,
       }));
-      setIsAddingDescription(false); // Fecha a caixa de texto após atualizar a descrição
+      setIsAddingDescription(false);
     } catch (error) {
       console.log("Error updating project description:", error);
     }
   };
 
   const cancelAddDescription = () => {
-    setIsAddingDescription(false); // Fecha a caixa de texto sem atualizar a descrição
+    setIsAddingDescription(false);
   };
 
   const handleDeleteProject = () => {
@@ -115,7 +113,7 @@ function ProjectDetailsPage(props) {
       // Show an error or a notification that the project name is incorrect
       console.log("Project name does not match. Project was not deleted.");
     }
-    navigate("/assistant");
+    navigate("/");
     //  setIsDeleting(false)
   };
 
@@ -137,13 +135,14 @@ function ProjectDetailsPage(props) {
         tasks: [...prevProject.tasks, createdTask],
       }));
 
-      setShowAddTaskForm(false); // Fecha o formulário após adicionar a tarefa
+      setShowAddTaskForm(false);
     } catch (error) {
       console.error("Error adding new task:", error);
     }
   };
 
   useEffect(() => {
+    console.log("Fetching project details...");
     const fetchProject = async () => {
       const storedToken = localStorage.getItem("authToken");
       try {
@@ -155,13 +154,11 @@ function ProjectDetailsPage(props) {
         );
         const fetchedProject = projectResponse.data;
 
-        const tasksResponse = await axios.get(
-          `${API_URL}/api/tasks/${projectId}`,
-          {
-            headers: { Authorization: `Bearer ${storedToken}` },
-          }
-        );
-        const fetchedTasks = tasksResponse.data;
+        console.log("Fetched project details:", fetchedProject);
+        
+        const fetchedTasks = projectResponse.data.tasks;
+
+        console.log("Fetched tasks:", fetchedTasks);
 
         setProject({
           ...fetchedProject,
@@ -175,242 +172,246 @@ function ProjectDetailsPage(props) {
         console.log("Error fetching project:", error);
       }
     };
-
+    
     fetchProject();
   }, [projectId]);
 
-  // Filtra as tarefas com base no status selecionado
   const filteredTasks = project?.tasks?.filter((task) => {
     if (filterStatus === "All") return true;
     return task.status === filterStatus;
   });
 
+  console.log("Filtered tasks:", filteredTasks);
+
+
   filteredTasks.sort((a, b) => {
-    // Tratamento para "deadline" não definido
     if (!a.deadline && !b.deadline) return 0;
     if (!a.deadline) return 1;
     if (!b.deadline) return -1;
 
-    // Comparação com base na data de prazo
     return new Date(a.deadline) - new Date(b.deadline);
   });
 
   return (
-<>
-    <div className="ProjectDetails">
-      {project ? (
-        <>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              padding: "32px",
-              paddingBottom: "0px",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <h1>{project.projectName}</h1>
-
-              {isAddingDescription ? (
-                <div>
-                  <input
-                    type="text"
-                    value={projectDescription}
-                    onChange={(e) => setProjectDescription(e.target.value)}
-                  />
-                  <button onClick={updateProjectDescription}>OK</button>
-                  <button onClick={cancelAddDescription}>Cancel</button>
-                </div>
-              ) : (
-                <>
-                  {project.description ===
-                  "Add your project description here" ? (
-                    <button onClick={() => setIsAddingDescription(true)}>
-                      Add a project description here
-                    </button>
-                  ) : null}
-                </>
-              )}
-              <h1>{project.description}</h1>
-
-              {/* Message shown after successful deletion */}
-              {showDeleteMessage && (
-                <div>
-                  <p>Project deleted!</p>
-                  <Link to="/projects">
-                    <Button onClick={() => setShowDeleteMessage(false)}>
-                      OK
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
-            {!showAddTaskForm && !isDeleting && (
-              <Button
-                icon="add"
-                color="#ebee41"
-                onClick={() => setShowAddTaskForm(true)}
-              >
-                Add New Task
-              </Button>
-            )}
-          </div>
-
-          <div
-            style={{
-              padding: "16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-            }}
-          >
-            {/* Formulário para adicionar uma nova tarefa */}
-            {showAddTaskForm && (
-              <AddTaskForm
-                onAddTask={handleAddTask}
-                onCancel={() => setShowAddTaskForm(false)}
-              />
-            )}
-
+    <>
+      <div className="ProjectDetails">
+        {project ? (
+          <>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gap: "32px",
+                gridTemplateColumns: "1fr auto",
+                padding: "32px",
+                paddingBottom: "0px",
+                alignItems: "center",
               }}
             >
-              <div className="boardColumn" style={{ borderRadius: "7px" }}>
-                <h2>To do</h2>
-                {filteredTasks
-                  .filter((task) => task.status === "pending")
-                  .map((task, index) => (
-                    <div key={task._id}>
-                      <TaskMiniCard
-                        setCardDetail={setCardDetail}
-                        index={index}
-                        task={task.task}
-                        taskId={task._id}
-                        status={task.status}
-                        deadline={task.deadline}
-                        subTasks={task.subTasks}
-                      />
-                    </div>
-                  ))}
+              <div>
+                <h1>{project.projectName}</h1>
+
+                {isAddingDescription ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={projectDescription}
+                      onChange={(e) => setProjectDescription(e.target.value)}
+                    />
+                    <button onClick={updateProjectDescription}>OK</button>
+                    <button onClick={cancelAddDescription}>Cancel</button>
+                  </div>
+                ) : (
+                  <>
+                    {project.description ===
+                    "Add your project description here" ? (
+                      <button onClick={() => setIsAddingDescription(true)}>
+                        Add a project description here
+                      </button>
+                    ) : null}
+                  </>
+                )}
+                <h1>{project.description}</h1>
+
+                {/* Message shown after successful deletion */}
+                {showDeleteMessage && (
+                  <div>
+                    <p>Project deleted!</p>
+                    <Link to="/projects">
+                      <Button onClick={() => setShowDeleteMessage(false)}>
+                        OK
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
-              <div className="boardColumn" style={{ borderRadius: "7px" }}>
-                <h2>Doing</h2>
-                {filteredTasks
-                  .filter((task) => task.status === "doing")
-                  .map((task, index) => (
-                    <div key={task._id}>
-                      <TaskMiniCard
-                        setCardDetail={setCardDetail}
-                        index={index}
-                        task={task.task}
-                        taskId={task._id}
-                        status={task.status}
-                        deadline={task.deadline}
-                        subTasks={task.subTasks}
-                      />
-                    </div>
-                  ))}
-              </div>
-              <div className="boardColumn" style={{ borderRadius: "7px" }}>
-                <h2>Done</h2>
-                {filteredTasks
-                  .filter((task) => task.status === "done")
-                  .map((task, index) => (
-                    <div key={task._id}>
-                      <TaskMiniCard
-                        setCardDetail={setCardDetail}
-                        index={index}
-                        task={task.task}
-                        taskId={task._id}
-                        status={task.status}
-                        deadline={task.deadline}
-                        subTasks={task.subTasks}
-                      />
-                    </div>
-                  ))}
+              {!showAddTaskForm && !isDeleting && (
+                <Button
+                  icon="add"
+                  color="#ebee41"
+                  onClick={() => setShowAddTaskForm(true)}
+                >
+                  Add New Task
+                </Button>
+              )}
+            </div>
+
+            <div
+              style={{
+                padding: "16px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+              }}
+            >
+              {/* Formulário para adicionar uma nova tarefa */}
+              {showAddTaskForm && (
+                <AddTaskForm
+                  onAddTask={handleAddTask}
+                  onCancel={() => setShowAddTaskForm(false)}
+                />
+              )}
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: "32px",
+                }}
+              >
+                <div className="boardColumn" style={{ borderRadius: "7px" }}>
+                  <h2>To do</h2>
+                  {filteredTasks
+                    .filter((task) => task.status === "pending")
+                    .map((task, index) => (
+                      <div key={task._id}>
+                        <TaskMiniCard
+                          setCardDetail={setCardDetail}
+                          index={index}
+                          task={task.task}
+                          taskId={task._id}
+                          status={task.status}
+                          deadline={task.deadline}
+                          subTasks={task.subTasks}
+                        />
+                      </div>
+                    ))}
+                </div>
+                <div className="boardColumn" style={{ borderRadius: "7px" }}>
+                  <h2>Doing</h2>
+                  {filteredTasks
+                    .filter((task) => task.status === "doing")
+                    .map((task, index) => (
+                      <div key={task._id}>
+                        <TaskMiniCard
+                          setCardDetail={setCardDetail}
+                          index={index}
+                          task={task.task}
+                          taskId={task._id}
+                          status={task.status}
+                          deadline={task.deadline}
+                          subTasks={task.subTasks}
+                        />
+                      </div>
+                    ))}
+                </div>
+                <div className="boardColumn" style={{ borderRadius: "7px" }}>
+                  <h2>Done</h2>
+                  {filteredTasks
+                    .filter((task) => task.status === "done")
+                    .map((task, index) => (
+                      <div key={task._id}>
+                        <TaskMiniCard
+                          setCardDetail={setCardDetail}
+                          index={index}
+                          task={task.task}
+                          taskId={task._id}
+                          status={task.status}
+                          deadline={task.deadline}
+                          subTasks={task.subTasks}
+                        />
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <p>Loading...</p>
-      )}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingBottom: "16px",
-        }}
-      >
-        {!isDeleting && (
-          <Link
-            to={`/projects/edit/${projectId}`}
-            style={{ textDecoration: "none" }}
-          >
-            <Button icon="edit">Edit Project</Button>
-          </Link>
+          </>
+        ) : (
+          <p>Loading...</p>
         )}
-        {!isDeleting && (
-          <Button icon="delete" onClick={() => setIsDeleting(true)}>
-            Delete Project
-          </Button>
-        )}
-      </div>
-
-      {isDeleting && (
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "4px",
-            border: "2px dotted gray",
             justifyContent: "center",
-            margin: "10px",
-            padding: "10px",
-            borderRadius: "8px",
-            width: "95%",
-            height: "50px",
-            marginBottom: "40px",
+            alignItems: "center",
+            paddingBottom: "16px",
           }}
         >
-          <p>Are you sure you want to delete the project?</p>
-          <input
-            style={{ borderRadius: "5px", border: "2px solid", width: "300px" }}
-            type="text"
-            value={inputProjectName}
-            onChange={(e) => setInputProjectName(e.target.value)}
-            placeholder="write the project name here"
-          />
-          <div style={{ display: "flex" }}>
-            <Button color="#ebee41" onClick={handleDeleteProject}>
-              Confirm
+          {!isDeleting && (
+            <Link
+              to={`/projects/edit/${projectId}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Button icon="edit">Edit Project</Button>
+            </Link>
+          )}
+          {!isDeleting && (
+            <Button icon="delete" onClick={() => setIsDeleting(true)}>
+              Delete Project
             </Button>
-            <Button onClick={() => setIsDeleting(false)}>Cancel</Button>
-          </div>
+          )}
         </div>
-      )}
 
-      {activeTask === null ? null : (
-        <TaskCard
-          setCardDetail={setCardDetail}
-          taskId={activeTask._id}
-          task={activeTask.task}
-          estimatedTime={activeTask.estimatedTime}
-          status={activeTask.status}
-          deadline={activeTask.deadline}
-          subTasks={activeTask.subTasks}
-          updateTask={updateTask}
-          onDeleteTask={handleDeleteTask}
-          editTaskStatus={editTaskStatus} 
-        />
-      )}
-    </div>
+        {isDeleting && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              border: "2px dotted gray",
+              justifyContent: "center",
+              margin: "10px",
+              padding: "10px",
+              borderRadius: "8px",
+              width: "95%",
+              height: "50px",
+              marginBottom: "40px",
+            }}
+          >
+            <p>Are you sure you want to delete the project?</p>
+            <input
+              style={{
+                borderRadius: "5px",
+                border: "2px solid",
+                width: "300px",
+              }}
+              type="text"
+              value={inputProjectName}
+              onChange={(e) => setInputProjectName(e.target.value)}
+              placeholder="write the project name here"
+            />
+            <div style={{ display: "flex" }}>
+              <Button color="#ebee41" onClick={handleDeleteProject}>
+                Confirm
+              </Button>
+              <Button onClick={() => setIsDeleting(false)}>Cancel</Button>
+            </div>
+          </div>
+        )}
+
+        {activeTask === null ? null : (
+          <TaskCard
+            setCardDetail={setCardDetail}
+            taskId={activeTask._id}
+            task={activeTask.task}
+            estimatedTime={activeTask.estimatedTime}
+            status={activeTask.status}
+            deadline={activeTask.deadline}
+            subTasks={activeTask.subTasks}
+            updateTask={updateTask}
+            onDeleteTask={handleDeleteTask}
+            editTaskStatus={editTaskStatus}
+          />
+        )}
+      </div>
     </>
   );
 }

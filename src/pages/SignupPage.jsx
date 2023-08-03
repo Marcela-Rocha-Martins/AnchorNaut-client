@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "../components/Button";
+import { useMediaQuery } from "react-responsive";
 
 const API_URL = "http://localhost:5005";
 
 function SignupPage(props) {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" }); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -18,12 +20,9 @@ function SignupPage(props) {
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    // Create an object representing the request body
+
     const requestBody = { email, password, name };
 
-    // Make an axios request to the API
-    // If POST request is successful redirect to login page
-    // If the request resolves with an error, set the error message in the state
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
       .then((response) => {
@@ -40,27 +39,37 @@ function SignupPage(props) {
     <body>
       <div
         style={{
-          padding: "2%",
-          width: "100vw",
-          position: "fixed",
+          margin: "5px",
+          width:"100%",
+          position:"fixed",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          justifyContent: "center", 
         }}
       >
-        {" "}
         <div
           className="SignupPage"
           style={{
-            paddingTop: "10px",
             alignItems: "center",
+            position: "relat",
             backgroundColor: "white",
             border: "2px solid black",
             borderRadius: "8px",
+            width: isMobile ? "75%" : "30%",
+            display: "flex",
+            flexDirection: "column", 
+            alignItems: "center", 
           }}
         >
-          <h1>Sign Up</h1>
+           <h1
+        style={{
+          fontSize: isMobile ? "26px" : "36px", // Altere os tamanhos de fonte conforme necessário
+          color: "#333",
+          fontWeight: "bold",
+          textAlign: "center",
+        }}
+      >Sign Up</h1>
 
           <div
             className="form-wrapper"
