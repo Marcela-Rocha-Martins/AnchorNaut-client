@@ -58,8 +58,7 @@ function SignupPage(props) {
             borderRadius: "8px",
             width: isMobile ? "75%" : "30%",
             display: "flex",
-            flexDirection: "column", 
-            alignItems: "center", 
+            flexDirection: "column",
           }}
         >
            <h1
