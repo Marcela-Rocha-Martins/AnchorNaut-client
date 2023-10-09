@@ -24,7 +24,7 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
   };
 
   const handleCancelClick = () => {
-    // Se o usuário cancelar a edição, restauramos o texto original
+    //To restore the previous text
     setEditedText(task.text);
     setEditing(false);
   };
@@ -58,7 +58,6 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
       setTasks(newTasks);
 
       console.log("Break More Sucessful", tasks);
-      // console.log("SetTasks:", response.data.data);
     } catch (error) {
       console.error("Error calling Dream Assistant API to subtasks:", error);
     }
@@ -102,7 +101,6 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
   };
 
   useEffect(() => {
-    //console.log("SubTasks:", subTasks);
   }, [subTasks]);
 
   return (
@@ -119,11 +117,11 @@ const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
       }}
     >
       {editing ? (
-        <>
-          <input type="text" value={editedText} onChange={handleChange} />
+        <div className="task-editing" style={{display: "flex"}}>
+          <input style={{width: "450px"}} type="text" value={editedText} onChange={handleChange} />
           <Button onClick={handleSaveClick}>OK</Button>
           <Button onClick={handleCancelClick}>Cancel</Button>
-        </>
+        </div>
       ) : (
         <>
         <div style={{display:"grid",gridTemplateColumns:"1fr auto"}}>

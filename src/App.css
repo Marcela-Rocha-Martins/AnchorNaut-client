@@ -103,7 +103,9 @@ label {
 
 input[type="email"],
 input[type="password"],
-input[type="name"] {
+input[type="name"],
+input[type="text"],
+input[type="description"] {
   background-color: #e3eaed;
   border-radius: 8px;
   padding: 5px;
