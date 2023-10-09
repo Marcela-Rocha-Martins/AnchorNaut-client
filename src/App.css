@@ -1,4 +1,4 @@
-@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 .App {
   text-align: center;
@@ -33,15 +33,15 @@
 }
 
 .boardColumn {
-padding: 32px;
-display: flex;
-flex-direction: column;
-gap: 16px;
-background-color: #ececec;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #ececec;
 }
 
 .pressAnimation {
-  filter: drop-shadow(-4px 4px 0px #000 );
+  filter: drop-shadow(-4px 4px 0px #000);
   position: relative;
 }
 
@@ -49,4 +49,87 @@ background-color: #ececec;
   top: 4px;
   left: -4px;
   filter: none;
+}
+
+.work-heading {
+  color: #333333;
+  font-weight: 500;
+  margin: 0px;
+}
+
+.work-text {
+  color: #333333;
+  margin: 10px;
+  margin-top: 0;
+}
+
+.work {
+  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  width: 85px;
+}
+
+/* styles.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.LoginPage {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 8px;
+  width: 30%;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="name"] {
+  background-color: #e3eaed;
+  border-radius: 8px;
+  padding: 5px;
+  width: 200px;
+}
+
+.error-message {
+  color: red;
+}
+
+p {
+  padding-bottom: 0;
+}
+
+button {
+  border: none;
+  background-color: white;
+  font-size: 16px;
+}
+
+button a {
+  color: #0c1018;
+  text-decoration: none;
+}
+
+button i {
+  color: #0c1018;
+  margin-left: 5px;
 }

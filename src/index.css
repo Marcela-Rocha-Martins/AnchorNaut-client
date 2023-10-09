@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 *{
   font-family: "Eudoxus Sans", sans-serif;
@@ -97,15 +94,6 @@ textarea {
   background-color: rgb(239, 196, 88);
 }
 
-.SignupPage,
-.LoginPage {
-  background-color: #608dd5;
-}
-
-.LoginPage {
-  background-color: #94a7c8;
-}
-
 .EditProjectPage form,
 .AddTask form,
 .AddProject form,
@@ -114,13 +102,10 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .AddTask button,
 .AddProject button {
   display: block;
-}
-
-.TaskCard {
-  background-color: #dfeef9;
 }

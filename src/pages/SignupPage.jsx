@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 const API_URL = "http://localhost:5005";
 
 function SignupPage(props) {
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" }); 
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -40,54 +40,44 @@ function SignupPage(props) {
       <div
         style={{
           margin: "5px",
-          width:"100%",
-          position:"fixed",
+          width: "100%",
+          position: "fixed",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center", 
+          justifyContent: "center",
         }}
       >
+        <h2 style={{ fontWeight: "550", margin: "40px" }}>
+          Become an AnchorNaut and turn your dreams into tangible plans
+        </h2>
         <div
           className="SignupPage"
           style={{
             alignItems: "center",
-            position: "relat",
-            backgroundColor: "white",
+            justifyContent: "center",
             border: "2px solid black",
             borderRadius: "8px",
-            width: isMobile ? "75%" : "30%",
+            width: isMobile ? "300px" : "400px",
+            height: "450px",
             display: "flex",
+            gap: "20px",
             flexDirection: "column",
           }}
         >
-           <h1
-        style={{
-          fontSize: isMobile ? "26px" : "36px", // Altere os tamanhos de fonte conforme necessário
-          color: "#333",
-          fontWeight: "bold",
-          textAlign: "center",
-        }}
-      >Sign Up</h1>
-
           <div
             className="form-wrapper"
-            style={{ padding: "10px", alignItems: "center" }}
+            style={{ padding: "10px", alignItems: "center"}}
           >
             <form onSubmit={handleSignupSubmit}>
               <label style={{ fontWeight: "bold" }}>Email:</label>
               <div>
                 <input
                   type="email"
+                  placeholder="youremail@here.com"
                   name="email"
                   value={email}
                   onChange={handleEmail}
-                  style={{
-                    backgroundColor: "#f2f2f2",
-                    borderRadius: "8px",
-                    padding: "5px",
-                    width: "250px",
-                  }}
                 />
                 <i
                   className="fa-solid fa-envelope"
@@ -100,31 +90,25 @@ function SignupPage(props) {
                 <input
                   type="password"
                   name="password"
+                  placeholder="************"
                   value={password}
                   onChange={handlePassword}
-                  style={{
-                   
-                    borderRadius: "8px",
-                    padding: "5px",
-                  }}
-                />{" "}
+                />
                 <i
                   className="fas fa-unlock-alt"
                   style={{ color: "#050505" }}
                 ></i>
               </div>
+              <label style={{ fontWeight: "bold", alignSelf: "center" }}>
+                Name:
+              </label>
               <div>
-                <label style={{ fontWeight: "bold" }}>Name:</label>
                 <input
-                  type="text"
+                  type="name"
+                  placeholder="Your name here"
                   name="name"
                   value={name}
                   onChange={handleName}
-                  style={{
-                    backgroundColor: "#E8F0FE",
-                    borderRadius: "8px",
-                    padding: "5px",
-                  }}
                 />
                 <i class="fa-solid fa-user" style={{ color: "#050506" }}></i>
               </div>
@@ -134,22 +118,29 @@ function SignupPage(props) {
             </form>
 
             {errorMessage && <p className="error-message">{errorMessage}</p>}
+            </div>
+            <div
+              className="bottom-form"
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+            <p style={{ marginBottom: "0", fontSize: "16px" }}>
+              Already have account?
+            </p>
+            <button
+              style={{
+                border: "none",
+                backgroundColor: "white",
+                fontSize: "16px",
+                fontWeight: "550",
+              }}
+            >
+              <Link to={"/login"}> Login</Link>
+              <i
+                className="fa-solid fa-arrow-right"
+                style={{ color: "#0c1018", marginLeft: "5px" }}
+              ></i>
+            </button>
           </div>
-          <p>Already have account?</p>
-
-          <button
-            style={{
-              border: "none",
-              backgroundColor: "white",
-              fontSize: "16px",
-            }}
-          >
-            <Link to={"/login"}> Login</Link>
-            <i
-              className="fa-solid fa-arrow-right"
-              style={{ color: "#0c1018", marginLeft: "5px" }}
-            ></i>
-          </button>
         </div>
       </div>
     </body>
