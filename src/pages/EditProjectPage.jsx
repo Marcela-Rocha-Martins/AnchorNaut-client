@@ -84,8 +84,8 @@ function EditProjectPage() {
           justifyContent: "center",
           border: "2px solid black",
           borderRadius: "8px",
-          width: "400px",
-          height: "450px",
+          width: "300px",
+          height: "350px",
           display: "flex",
           gap: "20px",
           flexDirection: "column",
@@ -113,7 +113,7 @@ function EditProjectPage() {
         </form>
         <div className="buttons-edit-page" style={{display:"flex"}}>
         <Button color="#EBEE41" type="submit">Update Project</Button>
-        <Link to={`/projects/${projectId}`}>
+        <Link style={{textDecoration: "none"}} to={`/projects/${projectId}`}>
         <Button>Cancel</Button>
         </Link>
         </div>

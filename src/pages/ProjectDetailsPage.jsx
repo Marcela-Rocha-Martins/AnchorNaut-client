@@ -155,7 +155,7 @@ function ProjectDetailsPage(props) {
         const fetchedProject = projectResponse.data;
 
         console.log("Fetched project details:", fetchedProject);
-        
+
         const fetchedTasks = projectResponse.data.tasks;
 
         console.log("Fetched tasks:", fetchedTasks);
@@ -172,7 +172,7 @@ function ProjectDetailsPage(props) {
         console.log("Error fetching project:", error);
       }
     };
-    
+
     fetchProject();
   }, [projectId]);
 
@@ -182,7 +182,6 @@ function ProjectDetailsPage(props) {
   });
 
   console.log("Filtered tasks:", filteredTasks);
-
 
   filteredTasks.sort((a, b) => {
     if (!a.deadline && !b.deadline) return 0;
@@ -365,34 +364,54 @@ function ProjectDetailsPage(props) {
             style={{
               display: "flex",
               alignItems: "center",
+              alignSelf: "center",
               gap: "4px",
-              border: "2px dotted gray",
               justifyContent: "center",
               margin: "10px",
               padding: "10px",
               borderRadius: "8px",
-              width: "95%",
+              width: "98%",
               height: "50px",
-              marginBottom: "40px",
+              marginBottom: "50px",
             }}
           >
-            <p>Are you sure you want to delete the project?</p>
-            <input
+            <div
               style={{
-                borderRadius: "5px",
-                border: "2px solid",
-                width: "300px",
+                display: "flex",
+                alignItems: "center",
+                alignSelf: "center",
+                border: "2px solid black",
+                background: "#ebee41",
+                paddingRight: "10px",
+                paddingLeft: "10px",
               }}
-              type="text"
-              value={inputProjectName}
-              onChange={(e) => setInputProjectName(e.target.value)}
-              placeholder="write the project name here"
-            />
-            <div style={{ display: "flex" }}>
-              <Button color="#ebee41" onClick={handleDeleteProject}>
-                Confirm
-              </Button>
-              <Button onClick={() => setIsDeleting(false)}>Cancel</Button>
+            >
+              <p
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                Are you sure you want to delete the project?
+              </p>
+              <input
+                style={{
+                  borderRadius: "5px",
+                  border: "2px solid",
+                  width: "300px",
+                  margin: "20px",
+                  fontWeight: "500",
+                  backgroundColor: "none",
+                }}
+                type="text"
+                value={inputProjectName}
+                onChange={(e) => setInputProjectName(e.target.value)}
+                placeholder="write the project name here"
+              />
+
+              <div style={{ display: "flex" }}>
+                <Button onClick={handleDeleteProject}>Confirm</Button>
+                <Button onClick={() => setIsDeleting(false)}>Cancel</Button>
+              </div>
             </div>
           </div>
         )}
