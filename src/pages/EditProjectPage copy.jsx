@@ -4,10 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
 import { Link } from "react-router-dom";
 
+
 const API_URL = "http://localhost:5005";
 
 function EditProjectPage() {
-  const [projectName, setProjectName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const navigate = useNavigate();
@@ -24,18 +25,15 @@ function EditProjectPage() {
       })
       .then((response) => {
         const oneProject = response.data;
-        console.log("Response from API:", oneProject); 
-        setProjectName(oneProject.projectName);
+        setTitle(oneProject.title);
         setDescription(oneProject.description);
       })
       .catch((error) => console.log(error));
   }, [projectId]);
-  console.log("projectId: " + projectId);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const requestBody = { projectName, description };
-    console.log("requestBody: " + requestBody);
+    const requestBody = { title, description };
 
     // Get the token from the localStorage
     const storedToken = localStorage.getItem("authToken");
@@ -46,18 +44,21 @@ function EditProjectPage() {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
       .then((response) => {
-        if (response.status === 200) {
-          navigate(`/projects/${projectId}`);
-        } else {
-          console.error(
-            "Atualização do projeto falhou: ",
-            response.status
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao atualizar o projeto: ", error);
+        navigate(`/projects/${projectId}`);
       });
+  };
+
+  const deleteProject = () => {
+    // Get the token from the localStorage
+    const storedToken = localStorage.getItem("authToken");
+
+    // Send the token through the request "Authorization" Headers
+    axios
+      .delete(`${API_URL}/api/projects/${projectId}`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      })
+      .then(() => navigate("/projects"))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -94,32 +95,28 @@ function EditProjectPage() {
           <label>Title:</label>
           <input
             type="text"
-            name="projectName"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
 
           <label>Description:</label>
           <input
-            style={{ height: "80px" }}
-            type="text"
+          style={{height: "80px"}}
+            type="description"
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-              <div className="buttons-edit-page" style={{ display: "flex" }}>
-          <Button color="#EBEE41" type="submit">
-            Update Project
-          </Button>
-          <Link
-            style={{ textDecoration: "none" }}
-            to={`/projects/${projectId}`}
-          >
-            <Button>Cancel</Button>
-          </Link>
-        </div>
+
+          
         </form>
-    
+        <div className="buttons-edit-page" style={{display:"flex"}}>
+        <Button color="#EBEE41" type="submit">Update Project</Button>
+        <Link style={{textDecoration: "none"}} to={`/projects/${projectId}`}>
+        <Button>Cancel</Button>
+        </Link>
+        </div>
       </div>
     </div>
   );

@@ -206,29 +206,10 @@ function ProjectDetailsPage(props) {
               }}
             >
               <div>
-                <h1>{project.projectName}</h1>
-
-                {isAddingDescription ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={projectDescription}
-                      onChange={(e) => setProjectDescription(e.target.value)}
-                    />
-                    <button onClick={updateProjectDescription}>OK</button>
-                    <button onClick={cancelAddDescription}>Cancel</button>
-                  </div>
-                ) : (
-                  <>
-                    {project.description ===
-                    "Add your project description here" ? (
-                      <button onClick={() => setIsAddingDescription(true)}>
-                        Add a project description here
-                      </button>
-                    ) : null}
-                  </>
-                )}
-                <h1>{project.description}</h1>
+                <div className="top-content" style={{display: "flex", flexDirection:"column", alignItems:"flex-start", gap:"6px"}}>
+                <h1 style={{ margin:"0", fontWeight:"550", backgroundColor: "#EBEE41"}}>{project.projectName}</h1>
+                <h3 style={{ margin:"0", fontWeight:"normal"}}>{project.description}</h3>
+                </div>
 
                 {/* Message shown after successful deletion */}
                 {showDeleteMessage && (

@@ -77,7 +77,6 @@ function HomePage() {
           : [],
       }));
 
- 
       const tasksResponse = await axios.post(
         `${API_URL}/api/tasks`,
         formattedTasks,
@@ -88,14 +87,12 @@ function HomePage() {
         }
       );
 
-     
       const taskIds = tasksResponse.data.map((task) => task._id);
       console.log(taskIds, "tasks Ids");
 
-   
       const projectData = {
         projectName: projectName,
-        tasksId: taskIds, 
+        tasksId: taskIds,
         user: user._id,
       };
 
@@ -143,7 +140,7 @@ function HomePage() {
         <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
           <div style={{ textAlign: "center" }}>
             <h2 style={isMobile ? { fontSize: "16px" } : { fontSize: "30px" }}>
-              Transform Your Dreams into Personal Projects
+              Transform your dreams into personal projects
             </h2>
             <p style={isMobile ? { fontSize: "14px" } : { fontSize: "18px" }}>
               Dream Assistant is a potent tool to transform your dreams into
@@ -151,8 +148,18 @@ function HomePage() {
               Assistant, and it suggests tasks for you to achieve it. You can
               approve, edit, and refine tasks to make your dreams come true
             </p>
+            <p style={{ fontWeight: "550", weight: "auto" }}>
+              Created by{" "}
+              <a
+                style={{ textDecoration: "none", backgroundColor: "#EBEE41" }}
+                href="https://github.com/Marcela-Rocha-Martins"
+                target="_blank"
+              >
+                Marcela Rocha
+              </a>
+            </p>
           </div>
-  
+
           {tasks && tasks.length > 0 ? null : (
             <div
               style={{
@@ -198,7 +205,7 @@ function HomePage() {
               )}
             </div>
           )}
-  
+
           <div>
             {tasks && tasks.length > 0 ? (
               <div
@@ -206,7 +213,7 @@ function HomePage() {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  gap: "20px"
+                  gap: "20px",
                 }}
               >
                 <div
@@ -218,25 +225,43 @@ function HomePage() {
                   }}
                 >
                   {showAlert ? null : (
-                    <div className="project-entry" style={{ display: "flex", flexDirection:"column", alignItems: "center" }}>
-                      <h2>Tasks suggested by Dream Assistant</h2>
+                    <div
+                      className="project-entry"
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <h2>Tasks suggested by your Dream Assistant</h2>
                       <div style={{ display: "flex" }}>
-                        <Button color="#EBEE41" onClick={handleApproveProjectEntry}>
-                          Approve Project Entry
+                        <Button
+                          color="#EBEE41"
+                          onClick={handleApproveProjectEntry}
+                        >
+                          Approve project entry
                         </Button>
-                        <Button icon="delete" onClick={() => setTasks([])}></Button>
+                        <Button
+                          icon="delete"
+                          onClick={() => setTasks([])}
+                        >Delete project</Button>
                       </div>
                     </div>
                   )}
-  
+
                   {showAlert && (
                     <div
                       className="project-entry2"
                       style={{
                         textAlign: "center",
                         // marginTop: "20px",
-                        display: "flex", flexDirection:"column", alignItems: "center", border: "2px dashed black",
-                        borderRadius: "8px", gap:"10px", paddingBottom:"24px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        border: "2px dashed black",
+                        borderRadius: "8px",
+                        gap: "10px",
+                        paddingBottom: "24px",
                       }}
                     >
                       <h2>Project created and tasks saved successfully!</h2>
@@ -246,7 +271,7 @@ function HomePage() {
                     </div>
                   )}
                 </div>
-  
+
                 {showAlert ? null : (
                   <div
                     className="tasksContainer1"
@@ -272,19 +297,23 @@ function HomePage() {
               </div>
             ) : (
               <div style={{ flex: "1", marginLeft: "10px" }}>
-                <h2>Projects List</h2>
-  
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "16px",
-                  }}
-                >
-                  {projects.map((project) => (
-                    <ProjectCard key={project._id} {...project} />
-                  ))}
-                </div>
+                {projects.length > 0 && (
+                  <>
+                    <h2>Projects List</h2>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "16px",
+                      }}
+                    >
+                      {projects.map((project) => (
+                        <ProjectCard key={project._id} {...project} />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -316,7 +345,7 @@ function HomePage() {
               type="video/mp4"
             />
           </video>
-  
+
           <div
             className="intro"
             style={{
@@ -411,8 +440,8 @@ function HomePage() {
               >
                 Navigate through a unique and personalized journey with our
                 AI-powered assistant, AnchorNaut. Experience the depth of
-                tailored support as it comprehends your aspirations
-                profoundly, serving as your dream co-pilot
+                tailored support as it comprehends your aspirations profoundly,
+                serving as your dream co-pilot
               </p>
             </div>
             <div
@@ -484,8 +513,8 @@ function HomePage() {
               >
                 Enhance your productivity while you navigate your path to
                 success! AnchorNaut simplifies your voyage with intuitive and
-                user-friendly task lists, along with advanced tracking tools
-                to ensure your progress
+                user-friendly task lists, along with advanced tracking tools to
+                ensure your progress
               </p>
             </div>
           </div>
@@ -493,7 +522,6 @@ function HomePage() {
       )}
     </div>
   );
-  
 }
 
 export default HomePage;
