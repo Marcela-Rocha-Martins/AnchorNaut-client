@@ -8,12 +8,13 @@ const AddTaskForm = ({ onAddTask, onCancel }) => {
   const [deadline, setDeadline] = useState("");
 
   const handleAddTask = () => {
-    // Criando um objeto com os dados da nova tarefa
+    // new object with the new data
     const newTask = {
       task: task,
       status: status,
+      estimatedTime: estimatedTime,
       deadline: deadline || "",
-      subTasks: [], // Inicialmente, a nova tarefa não tem subtarefas, então criamos um array vazio
+      subTasks: [], 
     };
 
     // Chamar a função onAddTask passada como prop para adicionar a nova tarefa ao projeto
@@ -66,7 +67,7 @@ const AddTaskForm = ({ onAddTask, onCancel }) => {
 
         <span className="material-icons-outlined">calendar_month</span>
         <input
-          style={{ border: "2px solid", fontSize: "15px", marginLeft: "5px" }}
+          style={{ border: "2px solid", fontSize: "15px", marginLeft: "5px", borderRadius:"8px", height:"14px" }}
           type="date"
           name="deadline"
           value={deadline}

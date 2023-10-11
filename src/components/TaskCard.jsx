@@ -22,7 +22,7 @@ function TaskCard({
   const [showAddSubtaskForm, setShowAddSubtaskForm] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [subtasks, setSubtasks] = useState([]);
-
+  
   const storedToken = localStorage.getItem("authToken");
 
   const [editedTask, setEditedTask] = useState({
@@ -435,14 +435,15 @@ function TaskCard({
                   justifyContent: "space-between",
                 }}
               >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <h2>{editedTask.task}</h2>
+                <div style={{ display: "flex", flexDirection: "column", alignItems:"flex-start", gap:"6px" }}>
+                  <h2 style={{ margin:"0", textAlign: "left"}}>{editedTask.task}</h2>
                   <div style={{ display: "flex", gap: "20px" }}>
                     <p
                       style={{
                         display: "flex",
                         gap: "4px",
                         alignItems: "center",
+                        margin:"0"
                       }}
                     >
                       <p>Estimated time: </p>

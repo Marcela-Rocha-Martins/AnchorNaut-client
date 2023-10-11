@@ -129,6 +129,8 @@ function ProjectDetailsPage(props) {
         }
       );
       const createdTask = response.data;
+      console.log("createdTask", createdTask);
+
 
       setProject((prevProject) => ({
         ...prevProject,
@@ -146,6 +148,7 @@ function ProjectDetailsPage(props) {
     const fetchProject = async () => {
       const storedToken = localStorage.getItem("authToken");
       try {
+        console.log(projectId, "project id")
         const projectResponse = await axios.get(
           `${API_URL}/api/projects/${projectId}`,
           {

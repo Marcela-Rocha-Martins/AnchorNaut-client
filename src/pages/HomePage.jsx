@@ -55,49 +55,19 @@ function HomePage() {
   };
 
   const handleApproveProjectEntry = async () => {
-    const projectName = prompt("Enter a name for your new personal project:");
-
+    const projectName = prompt("Enter a name for your new personal project");
+  
     if (!projectName) {
       return;
     }
-
+  
     try {
-      // Save all tasks and subtasks under the project
-      const formattedTasks = tasks.map((task) => ({
-        task: task.text,
-        estimatedTime: task.time,
-        project: null,
-        status: "pending",
-        deadline: null,
-        subtasks: task.subTasks
-          ? task.subTasks.map((subtask) => ({
-              subtask: subtask.text,
-              estimatedTime: subtask.time,
-            }))
-          : [],
-      }));
-
-      const tasksResponse = await axios.post(
-        `${API_URL}/api/tasks`,
-        formattedTasks,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const taskIds = tasksResponse.data.map((task) => task._id);
-      console.log(taskIds, "tasks Ids");
-
+      // Crie o projeto primeiro
       const projectData = {
         projectName: projectName,
-        tasksId: taskIds,
         user: user._id,
       };
-
-      console.log(projectData, "projectData");
-
+  
       const projectResponse = await axios.post(
         `${API_URL}/api/projects`,
         projectData,
@@ -107,9 +77,35 @@ function HomePage() {
           },
         }
       );
-
+  
       const projectId = projectResponse.data._id;
-
+  
+   
+      const formattedTasks = tasks.map((task) => ({
+        task: task.text,
+        estimatedTime: task.time,
+        project: projectId, 
+        status: "pending",
+        deadline: null,
+        subtasks: task.subTasks
+          ? task.subTasks.map((subtask) => ({
+              subtask: subtask.text,
+              estimatedTime: subtask.time,
+            }))
+          : [],
+      }));
+  
+     console.log(formattedTasks, "formatted tasks")
+      const tasksResponse = await axios.post(
+        `${API_URL}/api/tasks`,
+        formattedTasks,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
       const projectLink = `/projects/${projectId}`;
       setProjectLink(projectLink);
       setShowAlert(true);
@@ -117,6 +113,70 @@ function HomePage() {
       console.error("Error creating project and saving tasks:", error);
     }
   };
+
+  // const handleApproveProjectEntry = async () => {
+  //   const projectName = prompt("Enter a name for your new personal project:");
+
+  //   if (!projectName) {
+  //     return;
+  //   }
+
+  //   try {
+  //     // Save all tasks and subtasks under the project
+  //     const formattedTasks = tasks.map((task) => ({
+  //       task: task.text,
+  //       estimatedTime: task.time,
+  //       project: null,
+  //       status: "pending",
+  //       deadline: null,
+  //       subtasks: task.subTasks
+  //         ? task.subTasks.map((subtask) => ({
+  //             subtask: subtask.text,
+  //             estimatedTime: subtask.time,
+  //           }))
+  //         : [],
+  //     }));
+
+  //     const tasksResponse = await axios.post(
+  //       `${API_URL}/api/tasks`,
+  //       formattedTasks,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const taskIds = tasksResponse.data.map((task) => task._id);
+  //     console.log(taskIds, "tasks Ids");
+
+  //     const projectData = {
+  //       projectName: projectName,
+  //       tasksId: taskIds,
+  //       user: user._id,
+  //     };
+
+  //     console.log(projectData, "projectData");
+
+  //     const projectResponse = await axios.post(
+  //       `${API_URL}/api/projects`,
+  //       projectData,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const projectId = projectResponse.data._id;
+
+  //     const projectLink = `/projects/${projectId}`;
+  //     setProjectLink(projectLink);
+  //     setShowAlert(true);
+  //   } catch (error) {
+  //     console.error("Error creating project and saving tasks:", error);
+  //   }
+  // };
 
   const getAllProjects = () => {
     const storedToken = localStorage.getItem("authToken");
