@@ -4,7 +4,8 @@ import axios from "axios";
 import { Button } from "../components/Button";
 import { useMediaQuery } from "react-responsive";
 
-const API_URL = "http://localhost:5005";
+// const API_URL = "http://localhost:5005";
+const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
 
 function SignupPage(props) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });

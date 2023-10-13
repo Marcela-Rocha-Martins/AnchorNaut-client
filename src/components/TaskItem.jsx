@@ -3,7 +3,8 @@ import axios from "axios";
 import { Button } from "./Button";
 
 
-const API_URL = "http://localhost:5005";
+// const API_URL = "http://localhost:5005";
+const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
 
 const TaskItem = ({ task, onDelete, token, tasks, setTasks, i }) => {
   const [editing, setEditing] = useState(false);

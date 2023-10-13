@@ -4,7 +4,8 @@ import AddSubtaskForm from "./AddSubtaskForm";
 import { SubtaskCard } from "./SubtaskCard";
 import { Button } from "./Button";
 
-const API_URL = "http://localhost:5005";
+// const API_URL = "http://localhost:5005";
+const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
 
 function TaskCard({
   taskId,

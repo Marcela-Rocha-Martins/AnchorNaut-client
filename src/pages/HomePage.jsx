@@ -7,7 +7,8 @@ import ProjectCard from "../components/ProjectCard";
 import { Button } from "../components/Button";
 import { useMediaQuery } from "react-responsive";
 
-const API_URL = "http://localhost:5005";
+// const API_URL = "http://localhost:5005";
+const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
 
 function HomePage() {
   const { user } = useContext(AuthContext);
