@@ -131,7 +131,6 @@ function ProjectDetailsPage(props) {
       const createdTask = response.data;
       console.log("createdTask", createdTask);
 
-
       setProject((prevProject) => ({
         ...prevProject,
         tasks: [...prevProject.tasks, createdTask],
@@ -148,7 +147,7 @@ function ProjectDetailsPage(props) {
     const fetchProject = async () => {
       const storedToken = localStorage.getItem("authToken");
       try {
-        console.log(projectId, "project id")
+        console.log(projectId, "project id");
         const projectResponse = await axios.get(
           `${API_URL}/api/projects/${projectId}`,
           {
@@ -184,8 +183,6 @@ function ProjectDetailsPage(props) {
     return task.status === filterStatus;
   });
 
-  console.log("Filtered tasks:", filteredTasks);
-
   filteredTasks.sort((a, b) => {
     if (!a.deadline && !b.deadline) return 0;
     if (!a.deadline) return 1;
@@ -209,9 +206,40 @@ function ProjectDetailsPage(props) {
               }}
             >
               <div>
-                <div className="top-content" style={{display: "flex", flexDirection:"column", alignItems:"flex-start", gap:"6px"}}>
-                <h1 style={{ margin:"0", fontWeight:"550", backgroundColor: "#EBEE41"}}>{project.projectName}</h1>
-                <h3 style={{ margin:"0", fontWeight:"normal"}}>{project.description}</h3>
+                <div
+                  className="top-content"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    gap: "6px",
+                  }}
+                >
+                  <h1
+                    style={{
+                      margin: "0",
+                      fontWeight: "550",
+                      backgroundColor: "#EBEE41",
+                    }}
+                  >
+                    {project.projectName}
+                  </h1>
+                  {project.description ? (
+                    <h3 style={{ margin: "0", fontWeight: "normal" }}>
+                      {project.description}
+                    </h3>
+                  ) : (
+                    <>
+                      <Link
+                        to={`/projects/edit/${projectId}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button onClick={() => setIsAddingDescription(true)}>
+                          + Add Description
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
 
                 {/* Message shown after successful deletion */}

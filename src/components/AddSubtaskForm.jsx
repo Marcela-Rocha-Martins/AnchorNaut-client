@@ -4,7 +4,15 @@ import { Button } from "./Button";
 
 const API_URL = "http://localhost:5005";
 
-function AddSubtaskForm({ taskId, onAddSubtask, setEditedSubTask }) {
+function AddSubtaskForm({
+  taskId,
+  onAddSubtask,
+  setEditedSubTask,
+  showAddSubtaskForm2,
+  showAddSubtaskForm,
+  setShowAddSubtaskForm2,
+  setShowAddSubtaskForm,
+}) {
   const [subtaskData, setSubtaskData] = useState({
     subTask: "",
     status: "pending",
@@ -39,13 +47,25 @@ function AddSubtaskForm({ taskId, onAddSubtask, setEditedSubTask }) {
       // Hide the form after successfully adding the subtask
       setIsFormVisible(false);
     } catch (error) {
-      console.error("Error calling API to add new subtask:", error.response.data);
+      console.error(
+        "Error calling API to add new subtask:",
+        error.response.data
+      );
     }
   };
 
   const handleCancel = () => {
     // Hide the form when the "Close" button is clicked
+
     setIsFormVisible(false);
+
+    setShowAddSubtaskForm(false);
+
+    setShowAddSubtaskForm2(false);
+
+    console.log("isFormVisible", isFormVisible);
+    console.log("showAddSubtaskForm", showAddSubtaskForm);
+    console.log("showAddSubtaskForm2", showAddSubtaskForm2);
   };
 
   if (!isFormVisible) {
@@ -55,44 +75,40 @@ function AddSubtaskForm({ taskId, onAddSubtask, setEditedSubTask }) {
   return (
     <div
       style={{
-        backgroundColor: "white",
+       
+        width:"80%",
+        alignSelf: "center",
         borderRadius: "8px",
         padding: "5px",
-        marginTop: "5px",
+        marginTop: "25px",
         border: "2px dotted black",
       }}
     >
       <div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto auto",
-          alignItems: "center",
-        }}
-      >
-        <input
-          type="text"
-          name="subtask"
-          value={subtaskData.subTask}
-          onChange={(e) => setSubtaskData({ ...subtaskData, subTask: e.target.value })}
-        />
-        <div>
-          <span className="material-icons-outlined">calendar_month</span>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto auto",
+            alignItems: "center",
+          }}
+        >
           <input
-            type="date"
-            name="deadline"
-            value={subtaskData.deadline}
-            onChange={(e) => setSubtaskData({ ...subtaskData, deadline: e.target.value })}
+            type="text"
+            name="subtask"
+            style={{width: "auto"}}
+            value={subtaskData.subTask}
+            onChange={(e) =>
+              setSubtaskData({ ...subtaskData, subTask: e.target.value })
+            }
           />
-        </div>
-        <div style={{display:"flex"}}>
-        <Button onClick={handleAddSubTask}>Add Subtask</Button>
-        <div style={{right: "30px"}}>
-        <Button icon="close" onClick={handleCancel}></Button>
-        </div>
+          <div style={{ display: "flex" }}>
+            <Button onClick={handleAddSubTask}>Add subtask</Button>
+            <div style={{ right: "30px" }}>
+              <Button icon="close" onClick={handleCancel}></Button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

@@ -34,10 +34,9 @@ export const SubtaskCard = ({
           <form>
           <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr auto auto",
+            display: "flex",
+            justifyContent:"center",
             alignItems: "center",
-        
           }}
         >
             <input
@@ -45,17 +44,9 @@ export const SubtaskCard = ({
               name="subTask"
               value={editedSubTask.subTask}
               onChange={handleSubTaskChange}
+              style={{width:"95%", alignSelf: "center"}}
             />
-            <div>
-            <span className="material-icons-outlined">calendar_month</span>
-              <input
-                type="date"
-                name="deadline"
-                value={editedSubTask.deadline}
-                onChange={handleSubTaskChange}
-              />
-            </div>
-            <div>
+            <div style={{display: "flex"}}>
             <Button icon="save" type="button" onClick={handleSaveSubTask}>
             </Button>
             <Button icon="" type="button" onClick={handleCancelSubTask}>
@@ -86,6 +77,7 @@ export const SubtaskCard = ({
             style={{
               textDecoration:
                 subtask.status === "done" ? "line-through" : "none",
+                textAlign: "left"
             }}
           >
             {subtask.subTask}
@@ -98,7 +90,7 @@ export const SubtaskCard = ({
           </p>
           <div style={{ display: "flex", gap: "5px" }}>
             {!subtask.unsaved && (
-              <div style={{ display: "flex", gap: "5px" }}>
+              <div style={{ display: "flex", gap: "2px" }}>
                 <Button icon="edit" onClick={() => handleEditSubtask(index)}></Button>
                 <Button icon="delete" onClick={() => handleDeleteSubtask(index)}>
                 </Button>

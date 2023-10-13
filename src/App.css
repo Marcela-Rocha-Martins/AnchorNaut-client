@@ -38,6 +38,7 @@
   flex-direction: column;
   gap: 16px;
   background-color: #ececec;
+  align-items: center;
 }
 
 .pressAnimation {

@@ -20,12 +20,16 @@ function TaskMiniCard({
         borderRadius: "8px",
         cursor: "pointer",
         backgroundColor: "#fff",
+        alignSelf: "center",
         padding: "24px",
+        width:"90%",
+        height:"180px",
+        justifyContent: "center",
       }}
       onClick={() => setCardDetail(taskId)}
     >
-      <div>
-        <h2 style={{ margin: "0px", marginBottom: "16px"}}>{task}</h2>
+      <div style={{alignSelf:"center", display:"flex", flexDirection:"column", gap: "50px"}}>
+        <h3 style={{ marginBottom: "0px", margin:"0px", marginTop:"50px"}}>{task}</h3>
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap:"32px", alignItems:"center"}}>
           <p style={{ display: "flex", alignItems: "center", gap:"4px", margin: "0px"}}>
             {deadline ? (

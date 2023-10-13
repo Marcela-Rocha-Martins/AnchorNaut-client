@@ -366,6 +366,7 @@ function HomePage() {
                         display: "grid",
                         gridTemplateColumns: "1fr 1fr",
                         gap: "16px",
+
                       }}
                     >
                       {projects.map((project) => (
@@ -384,6 +385,7 @@ function HomePage() {
             height: "100vh",
             boxSizing: "border-box",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <video
@@ -445,7 +447,7 @@ function HomePage() {
               Transform your craziest dreams into actionable and tangible
               personal projects{" "}
             </p>
-            <Link to="/signup">
+            <Link to="/signup" style={{textDecoration: "none"}}>
               <Button
                 className="pressAnimation"
                 style={{
