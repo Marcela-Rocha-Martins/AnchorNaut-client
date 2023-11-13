@@ -7,7 +7,8 @@ import TaskMiniCard from "../components/TaskMiniCard";
 import { Button } from "../components/Button";
 
 // const API_URL = "http://localhost:5005";
-const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
+// const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
+const API_URL = "https://anchornaut.cyclic.app/"
 
 function ProjectDetailsPage(props) {
   const [project, setProject] = useState({ tasks: [] });

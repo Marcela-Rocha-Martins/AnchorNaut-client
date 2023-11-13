@@ -4,7 +4,8 @@ import AddProject from "../components/AddProject";
 import ProjectCard from "../components/ProjectCard";
 
 // const API_URL = "http://localhost:5005";
-const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
+// const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
+const API_URL = "https://anchornaut.cyclic.app/"
 
 function ProjectListPage() {
   const [projects, setProjects] = useState([]);

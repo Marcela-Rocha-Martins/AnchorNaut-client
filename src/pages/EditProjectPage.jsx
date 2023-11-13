@@ -5,8 +5,8 @@ import { Button } from "../components/Button";
 import { Link } from "react-router-dom";
 
 // const API_URL = "http://localhost:5005";
-const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
-
+// const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
+const API_URL = "https://anchornaut.cyclic.app/"
 
 function EditProjectPage() {
   const [projectName, setProjectName] = useState("");
