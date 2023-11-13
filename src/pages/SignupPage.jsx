@@ -5,9 +5,8 @@ import { Button } from "../components/Button";
 import { useMediaQuery } from "react-responsive";
 
 // const API_URL = "http://localhost:5005";
-const API_URL = process.env.VITE_REACT_APP_SERVER_URL 
-
-// || "http://localhost:5005"; estava na linha de cima!!!!!!!!!!!!!
+// const API_URL = process.env.VITE_REACT_APP_SERVER_URL
+const API_URL = "https://anchornaut.cyclic.app/"
 
 function SignupPage(props) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -25,7 +24,7 @@ function SignupPage(props) {
     e.preventDefault();
 
     const requestBody = { email, password, name };
-
+    console.log("API_URL:", API_URL);
     axios
       .post(`${API_URL}/auth/signup`, requestBody)
       .then((response) => {
