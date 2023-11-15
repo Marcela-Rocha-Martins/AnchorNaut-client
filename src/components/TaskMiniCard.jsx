@@ -22,7 +22,7 @@ function TaskMiniCard({
         backgroundColor: "#fff",
         alignSelf: "center",
         padding: "24px",
-        width:"90%",
+        width:"200px",
         height:"180px",
         justifyContent: "center",
       }}
