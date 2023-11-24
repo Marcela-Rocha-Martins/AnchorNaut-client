@@ -125,7 +125,7 @@ function TaskCard({
       setLoading(false);
     }
   };
-
+  
   const handleSaveNewSubtasks = async (index) => {
     try {
       const response = await axios.post(
@@ -138,34 +138,76 @@ function TaskCard({
           headers: { Authorization: `Bearer ${storedToken}` },
         }
       );
-
+  
       const newSubtasks = [...editedTask.subTasks];
       newSubtasks[index].unsaved = false;
-
-      // Set the state only when the POST call is successful
+  
+      // Atualize o estado e execute a função de callback
       setEditedTask((prevState) => ({
         ...prevState,
         subTasks: newSubtasks,
-      }));
-      console.log(task, "a task");
-      let newObj = {
-        task: task,
-        estimatedTime: estimatedTime,
-        status: status,
-        deadline: deadline,
-        subTasks: [],
-      };
-      newObj.subTasks = [...subTasks, newSubtasks[index]];
-
-      // Set the state for 'task' only when the POST call is successful
-      updateTask(taskId, newObj);
+      }), () => {
+        // Função de callback - pode conter operações assíncronas adicionais
+        console.log("State updated:", editedTask);
+  
+        let newObj = {
+          task: task,
+          estimatedTime: estimatedTime,
+          status: status,
+          deadline: deadline,
+          subTasks: [],
+        };
+        newObj.subTasks = [...subTasks, newSubtasks[index]];
+  
+        // Atualize o estado global ou faça outras operações assíncronas, se necessário
+        updateTask(taskId, newObj);
+      });
     } catch (error) {
-      console.error(
-        "Error calling API to add new subtask:",
-        error.response.data
-      );
+      console.error("Error calling API to add new subtask:", error.response.data);
     }
   };
+
+  // const handleSaveNewSubtasks = async (index) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_URL}/api/tasks/${taskId}/subtasks`,
+  //       {
+  //         subTask: editedTask.subTasks[index].subTask,
+  //         estimatedTime: editedTask.subTasks[index].estimatedTime,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${storedToken}` },
+  //       }
+  //     );
+
+  //     const newSubtasks = [...editedTask.subTasks];
+  //     newSubtasks[index].unsaved = false;
+
+  //     // Set the state only when the POST call is successful
+  //     setEditedTask((prevState) => ({
+  //       ...prevState,
+  //       subTasks: newSubtasks,
+  //     }));
+
+  //     console.log(task, "a task");
+  //     let newObj = {
+  //       task: task,
+  //       estimatedTime: estimatedTime,
+  //       status: status,
+  //       deadline: deadline,
+  //       subTasks: [],
+  //     };
+  //     newObj.subTasks = [...subTasks, newSubtasks[index]];
+
+  //     // Set the state for 'task' only when the POST call is successful
+  //     updateTask(taskId, newObj);
+  //   } catch (error) {
+  //     console.error(
+  //       "Error calling API to add new subtask:",
+  //       error.response.data
+  //     );
+  //   }
+  // };
 
   const handleEditSubtask = (index) => {
     const subtaskToUpdate = editedTask.subTasks[index];
