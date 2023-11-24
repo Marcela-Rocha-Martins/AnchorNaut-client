@@ -125,7 +125,7 @@ function TaskCard({
       setLoading(false);
     }
   };
-  
+
   const handleSaveNewSubtasks = async (index) => {
     try {
       const response = await axios.post(
@@ -373,7 +373,6 @@ function TaskCard({
 
   const handleSubtaskStatusChange = async (index) => {
     try {
-      // Atualize o status da subtask no banco de dados
       const subtaskToUpdate = editedTask.subTasks[index];
       let newStatus;
 
@@ -381,7 +380,6 @@ function TaskCard({
         newStatus = "done";
       } else newStatus = "pending";
 
-      // Atualize o status da subtask no estado local
       const updatedSubTasks = [...editedTask.subTasks];
       updatedSubTasks[index].status = newStatus;
 
@@ -409,8 +407,13 @@ function TaskCard({
       ...prevState,
       subTasks: addingNewSubtask,
     }));
+
     // Hide the form after adding the subtask
     setShowAddSubtaskForm(false);
+  };
+
+  const handleReloadPage = () => {
+    window.location.reload();
   };
 
   return (
@@ -656,6 +659,7 @@ function TaskCard({
                       onClick={() => {
                         setCardDetail(null);
                         handleCancel();
+                        handleReloadPage();
                       }}
                     >
                       <span className="material-icons-outlined">close</span>
