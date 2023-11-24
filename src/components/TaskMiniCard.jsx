@@ -22,8 +22,7 @@ function TaskMiniCard({
         backgroundColor: "#fff",
         alignSelf: "center",
         padding: "24px",
-        width:"200px",
-        height:"180px",
+        width:"300px",
         justifyContent: "center",
       }}
       onClick={() => setCardDetail(taskId)}

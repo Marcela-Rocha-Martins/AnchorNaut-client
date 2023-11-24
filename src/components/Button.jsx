@@ -20,7 +20,7 @@ export const Button = ({ color = "white", onClick, icon, ...props }) => {
         textDecoration: "none",
         fontSize: isMobile ? "12px" : "16px",
         alignItems:"center",
-        justifyContent: isMobile ? "center" : "flex-start", // Centralizar quando for mobile
+        justifyContent: isMobile ? "center" : "flex-start", 
 
       }}
     >

@@ -9,7 +9,7 @@ import { useMediaQuery } from "react-responsive";
 
 // const API_URL = "http://localhost:5005";
 // const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
-const API_URL = "https://anchornaut.cyclic.app/"
+const API_URL = "https://anchornaut.cyclic.app"
 
 function HomePage() {
   const { user } = useContext(AuthContext);
@@ -82,7 +82,6 @@ function HomePage() {
   
       const projectId = projectResponse.data._id;
   
-   
       const formattedTasks = tasks.map((task) => ({
         task: task.text,
         estimatedTime: task.time,

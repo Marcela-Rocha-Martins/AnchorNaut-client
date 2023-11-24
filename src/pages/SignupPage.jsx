@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive";
 
 // const API_URL = "http://localhost:5005";
 // const API_URL = process.env.VITE_REACT_APP_SERVER_URL
-const API_URL = "https://anchornaut.cyclic.app/"
+const API_URL = "https://anchornaut.cyclic.app";
 
 function SignupPage(props) {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -69,7 +69,7 @@ function SignupPage(props) {
         >
           <div
             className="form-wrapper"
-            style={{ padding: "10px", alignItems: "center"}}
+            style={{ padding: "10px", alignItems: "center" }}
           >
             <form onSubmit={handleSignupSubmit}>
               <label style={{ fontWeight: "bold" }}>Email:</label>
@@ -120,11 +120,11 @@ function SignupPage(props) {
             </form>
 
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            </div>
-            <div
-              className="bottom-form"
-              style={{ display: "flex", flexDirection: "column" }}
-            >
+          </div>
+          <div
+            className="bottom-form"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
             <p style={{ marginBottom: "0", fontSize: "16px" }}>
               Already have account?
             </p>

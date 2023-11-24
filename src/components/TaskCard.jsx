@@ -6,7 +6,7 @@ import { Button } from "./Button";
 
 // const API_URL = "http://localhost:5005";
 // const API_URL = process.env.VITE_REACT_APP_SERVER_URL || "http://localhost:5005";
-const API_URL = "https://anchornaut.cyclic.app/";
+const API_URL = "https://anchornaut.cyclic.app";
 
 function TaskCard({
   taskId,
@@ -21,6 +21,7 @@ function TaskCard({
   editTaskStatus,
 }) {
   const [editing, setEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showAddSubtaskForm, setShowAddSubtaskForm] = useState(false);
   const [showAddSubtaskForm2, setShowAddSubtaskForm2] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -96,6 +97,7 @@ function TaskCard({
   };
 
   const handleBreakMoreClick = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${API_URL}/api/assistant`,
@@ -117,8 +119,10 @@ function TaskCard({
         ...prevState,
         subTasks: [...prevState.subTasks, ...newSubTasks],
       }));
+      setLoading(false);
     } catch (error) {
       console.error("Error calling Dream Assistant API to subtasks:", error);
+      setLoading(false);
     }
   };
 
@@ -646,7 +650,7 @@ function TaskCard({
               <>
                 <div style={{ display: "flex" }}>
                   <Button color="#EBEE41" onClick={handleBreakMoreClick}>
-                    Generate subtasks
+                  {loading ? "Loading..." : "Generate subtasks"}
                   </Button>
 
                   <div>
