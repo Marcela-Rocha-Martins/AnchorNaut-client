@@ -30,5 +30,5 @@ Axios is employed for making HTTP requests, enabling the frontend to interact wi
 
 ### Deployment
 
-- You can access the live website [HERE](https://anchornaut.netlify.app).
+- You can access the live website [HERE](https://anchornaut.netlify.app)
 
